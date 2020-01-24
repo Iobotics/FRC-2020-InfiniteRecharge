@@ -16,6 +16,8 @@ import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.OIConstants;
+import com.kauailabs.navx.frc.AHRS;
+import frc.robot.commands.Auto;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -65,6 +67,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return new Auto(gyro, 90.0, drivetrain);
   }
 }
