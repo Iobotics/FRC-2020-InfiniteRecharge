@@ -40,4 +40,15 @@ public final class Constants {
         //Xbox controller
         public static final int kRunShooter = 6;
     }
+
+    public static final class DrivetrainConstants {
+        public static final double kGearRatio = 10.71;
+        //in meters
+        public static final double kWheelDiameter = 0.2032;
+
+        public static final double kP = 0;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double kF = 0;
+    }
 }
