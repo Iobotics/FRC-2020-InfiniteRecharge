@@ -30,7 +30,7 @@ public class AutoDrive extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    drivetrain.setTank(0, 0);
+    drivetrain.stop();
     drivetrain.motionMagic(distance, 0.5);
   }
 
@@ -44,7 +44,7 @@ public class AutoDrive extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     drivetrain.config();
-    drivetrain.setTank(0, 0);
+    drivetrain.stop();
   }
 
   // Returns true when the command should end.

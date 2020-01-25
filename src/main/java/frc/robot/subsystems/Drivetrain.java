@@ -44,6 +44,10 @@ public class Drivetrain extends SubsystemBase {
     leftSlave.follow(leftMaster);
     rightSlave.follow(rightMaster);
   } 
+
+  public void stop() {
+    leftMaster.set(ControlMode.PercentOutput, )
+  }
   
   public void setTank(double leftPower, double rightPower){
     if (leftPower <= 0.3 && leftPower >= -0.3) {
