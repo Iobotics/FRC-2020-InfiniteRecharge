@@ -69,6 +69,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     //return new Auto(gyro, 90.0, drivetrain);
-    return new AutoDrive(drivetrain, 9);
+    return new AutoDrive(drivetrain, 5);
   }
 }
