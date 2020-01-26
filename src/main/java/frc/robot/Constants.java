@@ -54,7 +54,7 @@ public final class Constants {
         public static final float kI = 0f;
         public static final float kD = 0f;
         //Feed Forward
-        public static final float kF = 0f;
+        public static final float kF = 0.0457f;
     }
 
     public static final class ShooterConstants {
