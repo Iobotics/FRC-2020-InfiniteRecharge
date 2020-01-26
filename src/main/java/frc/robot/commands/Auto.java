@@ -33,7 +33,7 @@ public class Auto extends PIDCommand {
         () -> angle,
         // This uses the output
         output -> {
-          drive.setTank(output + Utils.absSign(output) * 0.43, output + Utils.absSign(output) * 0.43);
+          drive.setTank(output + Utils.absSign(output) * 0.43, -(output + Utils.absSign(output) * 0.43));
         });
         addRequirements(drive);
     // Use addRequirements() here to declare subsystem dependencies.

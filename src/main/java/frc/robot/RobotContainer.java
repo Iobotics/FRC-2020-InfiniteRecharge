@@ -51,7 +51,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     drivetrain.setDefaultCommand
-      (new RunCommand(() -> drivetrain.setTank(-joystick1.getY(), joystick2.getY()), drivetrain));
+      (new RunCommand(() -> drivetrain.setTank(Math.pow(-joystick1.getY(), 3), Math.pow(joystick2.getY(), 3)), drivetrain));
 
   }
   public double getGyro(){

@@ -8,9 +8,14 @@
 package frc.robot;
 
 /**
- * Add your docs here.
+ * Class for Utlity and Math function
  */
 public final class Utils {
+    /**
+     * 
+     * @param input
+     * @return takes input number and returns its sign (e.g. -100 becomes -1, 69 becomes 1, etc.)
+     */
      public static double absSign(double input){
         return (Math.abs(input) / input);
     }
