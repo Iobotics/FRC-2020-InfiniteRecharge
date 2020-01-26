@@ -51,12 +51,6 @@ public class Drivetrain extends SubsystemBase {
   }
   
   public void setTank(double leftPower, double rightPower){
-    if (leftPower <= 0.3 && leftPower >= -0.3) {
-      leftPower = 0;
-    }
-    if (rightPower <= 0.3 && rightPower >= -0.3) {
-      rightPower = 0;
-    }
     leftMaster.set(ControlMode.PercentOutput, Math.pow(leftPower, 3));
     rightMaster.set(ControlMode.PercentOutput, Math.pow(rightPower, 3));
   }

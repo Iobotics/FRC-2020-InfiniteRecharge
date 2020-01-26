@@ -16,6 +16,10 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.Constants.OIConstants;
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.commands.Auto;
@@ -31,7 +35,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
+  private final AHRS gyro = new AHRS();
   private final Drivetrain drivetrain = new Drivetrain();
 
   private final Joystick joystick1 = new Joystick(OIConstants.kJoystick1);
@@ -50,7 +54,9 @@ public class RobotContainer {
       (new RunCommand(() -> drivetrain.setTank(-joystick1.getY(), joystick2.getY()), drivetrain));
 
   }
-
+  public double getGyro(){
+    return gyro.getAngle();
+  }
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -58,6 +64,11 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    new JoystickButton(joystick1, 1).whenPressed(
+      new StartEndCommand(
+        ()->drivetrain.setTank(SmartDashboard.getNumber("power", 1), SmartDashboard.getNumber("power", 1)),
+        ()->drivetrain.setTank(0,0))
+      ); 
   }
 
 
