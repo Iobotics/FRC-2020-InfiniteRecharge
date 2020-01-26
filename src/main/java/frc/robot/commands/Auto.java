@@ -11,6 +11,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
+import frc.robot.Utils;
 import frc.robot.subsystems.Drivetrain;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -20,19 +21,20 @@ public class Auto extends PIDCommand {
   /**
    * Creates a new Auto.
    */
+
   public Auto(AHRS gyro, double angle, Drivetrain drive) {
     super(
         // The controller that the command will use
-        new PIDController(0.027, 0, 0),
+        //P was 0.012
+        new PIDController(0.006, 0, 0.006),
         // This should return the measurement
         gyro::getAngle,
         // This should return the setpoint (can also be a constant)
         () -> angle,
         // This uses the output
         output -> {
-          drive.setTank(output, output);
+          drive.setTank(output + Utils.absSign(output) * 0.43, output + Utils.absSign(output) * 0.43);
         });
-
         addRequirements(drive);
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
