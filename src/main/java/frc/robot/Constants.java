@@ -17,13 +17,16 @@ package frc.robot;
  */
 public final class Constants {
     public static final class RobotMap{
+        //Drivetrain
         public static final int kLeftMaster = 1;
         public static final int kRightMaster = 4;
         public static final int kLeftSlave = 2;
         public static final int kRightSlave = 3;
 
         public static final int kControlPanelSpinner = 6;
+
         public static final int kIntake = 9;
+        
         public static final int kLeftShooter = 7;
         public static final int kRightShooter = 10;
         public static final int kArticulatingHood = 5;
@@ -46,9 +49,20 @@ public final class Constants {
         //in meters
         public static final double kWheelDiameter = 0.2032;
 
-        public static final double kP = 0;
-        public static final double kI = 0;
-        public static final double kD = 0;
-        public static final double kF = 0;
+        //PID Values
+        public static final float kP = 0f;
+        public static final float kI = 0f;
+        public static final float kD = 0f;
+        //Feed Forward
+        public static final float kF = 0f;
+    }
+
+    public static final class ShooterConstants {
+        //PID Values
+        public static final float kP = 0f;
+        public static final float kI = 0f;
+        public static final float kD = 0f;
+        //Feed Forward
+        public static final float kF = 0f;
     }
 }
