@@ -32,7 +32,7 @@ public class AutoDrive extends CommandBase {
   @Override
   public void initialize() {
     drivetrain.stop();
-    drivetrain.motionMagic(distance, 300);
+    drivetrain.motionMagic(distance, 36);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

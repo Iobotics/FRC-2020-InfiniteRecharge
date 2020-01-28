@@ -46,8 +46,8 @@ public final class Constants {
 
     public static final class DrivetrainConstants {
         public static final double kGearRatio = 10.71;
-        //in meters
-        public static final double kWheelDiameter = 0.2032;
+        //in inches
+        public static final double kWheelDiameter = 8.00;
 
         //PID Values
         public static final float kP = 0f;
