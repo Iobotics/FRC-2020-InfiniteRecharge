@@ -65,10 +65,10 @@ public class Drivetrain extends SubsystemBase {
    * @param speed cruising speed of motor in inches per second
    */
   public void motionMagic (double distance, double speed) {
-    double rotations = distance/(DrivetrainConstants.kGearRatio*DrivetrainConstants.kWheelDiameter*Math.PI);
-    double targetPos = rotations*20735;
+    double rotations = (distance * DrivetrainConstants.kGearRatio)/(DrivetrainConstants.kWheelDiameter*Math.PI);
+    double targetPos = rotations*2048;
     //Convert target speed from inches / second to encoder units / 100 ms
-    double targetSpeed = speed * 20735 / (DrivetrainConstants.kGearRatio * DrivetrainConstants.kWheelDiameter * Math.PI * 10);
+    double targetSpeed = (speed *DrivetrainConstants.kGearRatio * 2048 * 10) / (DrivetrainConstants.kWheelDiameter * Math.PI);
 
     rightSlave.follow(leftMaster);
     rightMaster.follow(leftMaster);
