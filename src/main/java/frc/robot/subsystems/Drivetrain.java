@@ -82,8 +82,9 @@ public class Drivetrain extends SubsystemBase {
   public boolean isTargetAchieved (double distance, double error) {
     double rotations = (distance * DrivetrainConstants.kGearRatio)/(DrivetrainConstants.kWheelDiameter*Math.PI);
     double targetPos = rotations*2048;
-    double allowedError = (error * DrivetrainConstants.kGearRatio * 2048);
-    if(Math.abs(leftMaster.getSelectedSensorPosition() - targetPos) <=  3){
+    //converting allowed error from inches to encoder units
+    double allowedError = ((error * DrivetrainConstants.kGearRatio)/(DrivetrainConstants.kWheelDiameter * Math.PI) * 2048);
+    if(Math.abs(leftMaster.getSelectedSensorPosition() - targetPos) <= allowedError){
       return true;
     } else{
       return false;
