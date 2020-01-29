@@ -79,8 +79,15 @@ public class Drivetrain extends SubsystemBase {
   }
 
   //Are we there yet
-  public boolean isTargetAchieved () {
-    return false;
+  public boolean isTargetAchieved (double distance, double error) {
+    double rotations = (distance * DrivetrainConstants.kGearRatio)/(DrivetrainConstants.kWheelDiameter*Math.PI);
+    double targetPos = rotations*2048;
+    double allowedError = (error * DrivetrainConstants.kGearRatio * 2048);
+    if(Math.abs(leftMaster.getSelectedSensorPosition() - targetPos) <=  3){
+      return true;
+    } else{
+      return false;
+    }
   }
 
   @Override
