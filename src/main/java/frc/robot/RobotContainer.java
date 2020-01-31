@@ -10,10 +10,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.AutoDrive;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -32,11 +31,11 @@ import frc.robot.commands.Auto;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  
   private final AHRS gyro = new AHRS();
   private final Drivetrain drivetrain = new Drivetrain();
+  private final Limelight limelight = new Limelight();    
+  
 
   private final Joystick joystick1 = new Joystick(OIConstants.kJoystick1);
   private final Joystick joystick2 = new Joystick(OIConstants.kJoystick2);
@@ -52,6 +51,8 @@ public class RobotContainer {
     configureButtonBindings();
     drivetrain.setDefaultCommand
       (new RunCommand(() -> drivetrain.setTank(Math.pow(-joystick1.getY(), 3), Math.pow(joystick2.getY(), 3)), drivetrain));
+    limelight.setDefaultCommand
+      (new RunCommand(() -> limelight.printValues(), limelight));
 
   }
   public double getGyro(){
@@ -64,6 +65,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    new JoystickButton(joystick1, 2).whenPressed(
+      new AutoAlign(limelight, drivetrain));
     new JoystickButton(joystick1, 1).whenPressed(
       new StartEndCommand(
         ()->drivetrain.setTank(SmartDashboard.getNumber("power", 1), SmartDashboard.getNumber("power", 1)),
