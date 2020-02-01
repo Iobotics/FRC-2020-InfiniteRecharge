@@ -26,14 +26,15 @@ public class Auto extends PIDCommand {
     super(
         // The controller that the command will use
         //P was 0.012
-        new PIDController(0.006, 0, 0.006),
+        new PIDController(0.006, 0.006, 0.001),
         // This should return the measurement
         gyro::getAngle,
         // This should return the setpoint (can also be a constant)
         () -> angle,
         // This uses the output
         output -> {
-          drive.setTank(output + Utils.absSign(output) * 0.43, -(output + Utils.absSign(output) * 0.43));
+          drive.setTank(-output + Utils.absSign(-output) * 0.0, (output + Utils.absSign(output) * 0.0));
+          //drive.setTank(output, output);
         });
         addRequirements(drive);
     // Use addRequirements() here to declare subsystem dependencies.

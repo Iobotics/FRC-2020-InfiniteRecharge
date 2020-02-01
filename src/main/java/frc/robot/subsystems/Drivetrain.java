@@ -26,10 +26,20 @@ public class Drivetrain extends SubsystemBase {
     rightMaster =  new TalonSRX(RobotMap.kRightMaster);
     leftSlave = new TalonSRX(RobotMap.kLeftSlave);
     rightSlave = new TalonSRX(RobotMap.kRightSlave);
-    rightMaster.setInverted(true);
-    rightSlave.setInverted(true);
+    //Set Motor Polarities
+    leftMaster.setInverted(true);
+    leftSlave.setInverted(true);
+    rightMaster.setInverted(false);
+    rightSlave.setInverted(false);
+
+    //Slave motors
     leftSlave.follow(leftMaster);
     rightSlave.follow(rightMaster);
+
+    //Config Slave Deadband
+    leftSlave.configNeutralDeadband(0);
+    rightSlave.configNeutralDeadband(0);
+
 
     //Configure PIDF values for Auto drive, the Left Master is the master controller for PID
     leftMaster.config_kP(0, DrivetrainConstants.kP);
@@ -43,8 +53,10 @@ public class Drivetrain extends SubsystemBase {
    */
   public void config () {
     rightMaster.configFactoryDefault();
-    rightMaster.setInverted(true);
-    rightSlave.setInverted(true);
+    leftMaster.setInverted(true);
+    leftSlave.setInverted(true);
+    rightMaster.setInverted(false);
+    rightSlave.setInverted(false);
     leftSlave.follow(leftMaster);
     rightSlave.follow(rightMaster);
   } 

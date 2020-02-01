@@ -50,9 +50,10 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     drivetrain.setDefaultCommand
-      (new RunCommand(() -> drivetrain.setTank(Math.pow(-joystick1.getY(), 3), Math.pow(joystick2.getY(), 3)), drivetrain));
+      (new RunCommand(() -> drivetrain.setTank(Math.pow(joystick1.getY(), 3), Math.pow(joystick2.getY(), 3)), drivetrain));
     limelight.setDefaultCommand
       (new RunCommand(() -> limelight.printValues(), limelight));
+     
 
   }
   public double getGyro(){
@@ -83,6 +84,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     //return new Auto(gyro, 90.0, drivetrain);
-    return new AutoDrive(drivetrain, 50);
+    return new Auto(gyro, 90, drivetrain);
   }
 }
