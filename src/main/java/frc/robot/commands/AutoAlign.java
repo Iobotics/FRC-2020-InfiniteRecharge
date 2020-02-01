@@ -22,14 +22,14 @@ public class AutoAlign extends PIDCommand {
   public AutoAlign(Limelight limelight, Drivetrain drive) {
     super(
         // The controller that the command will use
-        new PIDController(0.027, 0, 0),
+        new PIDController(0.007, 0, 0),
         // This should return the measurement
         limelight::getTX,
         // This should return the setpoint (can also be a constant)
         () -> 0,
         // This uses the output
         output -> {
-          drive.setTank(output, output);
+          drive.setTank(-output, output);
           // Use the output here
         });
 

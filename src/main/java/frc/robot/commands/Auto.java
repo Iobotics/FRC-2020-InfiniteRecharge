@@ -22,15 +22,16 @@ public class Auto extends PIDCommand {
    * Creates a new Auto.
    */
 
-  public Auto(AHRS gyro, double angle, Drivetrain drive) {
+  public Auto(AHRS gyro, double angle, double initialAngle, Drivetrain drive) {
     super(
-        // The controller that the command will use
-        //P was 0.012
-        new PIDController(0.006, 0.006, 0.001),
+        // The controller that the co + gyro.getAngle(mmand will use
+        new PIDController(0.0135 * 0.8, 0.00, (0.0135 * 1.4)/10),
+        //new PIDController(0.0135 * 0.6, 1.2 * (0.0135 / 1.4), (0.0135 * 1.4 * 3)/40),
+
         // This should return the measurement
         gyro::getAngle,
         // This should return the setpoint (can also be a constant)
-        () -> angle,
+        () -> angle + initialAngle,
         // This uses the output
         output -> {
           drive.setTank(-output + Utils.absSign(-output) * 0.0, (output + Utils.absSign(output) * 0.0));

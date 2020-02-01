@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.commands.Auto;
+import frc.robot.commands.AutoAlign;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -84,6 +85,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     //return new Auto(gyro, 90.0, drivetrain);
-    return new Auto(gyro, 90, drivetrain);
+    return new Auto(gyro, 90, gyro.getAngle(), drivetrain);
   }
 }

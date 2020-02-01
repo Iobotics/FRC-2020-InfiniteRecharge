@@ -40,6 +40,9 @@ public class Drivetrain extends SubsystemBase {
     leftSlave.configNeutralDeadband(0);
     rightSlave.configNeutralDeadband(0);
 
+    //Config Ramp Rate
+    leftMaster.configOpenloopRamp(0.51);
+    rightMaster.configOpenloopRamp(0.52);
 
     //Configure PIDF values for Auto drive, the Left Master is the master controller for PID
     leftMaster.config_kP(0, DrivetrainConstants.kP);
