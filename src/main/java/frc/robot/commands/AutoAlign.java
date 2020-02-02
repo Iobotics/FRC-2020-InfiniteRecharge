@@ -19,6 +19,7 @@ public class AutoAlign extends PIDCommand {
   /**
    * Creates a new AutoAlign.
    */
+
   public AutoAlign(Limelight limelight, Drivetrain drive) {
     super(
         // The controller that the command will use
@@ -29,10 +30,9 @@ public class AutoAlign extends PIDCommand {
         () -> 0,
         // This uses the output
         output -> {
-          drive.setTank(-output, output);
+          drive.setTank(output, -output);
           // Use the output here
         });
-
         addRequirements(drive,limelight);
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.

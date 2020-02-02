@@ -27,10 +27,13 @@ public class Drivetrain extends SubsystemBase {
     leftSlave = new TalonSRX(RobotMap.kLeftSlave);
     rightSlave = new TalonSRX(RobotMap.kRightSlave);
     //Set Motor Polarities
-    leftMaster.setInverted(true);
-    leftSlave.setInverted(true);
-    rightMaster.setInverted(false);
-    rightSlave.setInverted(false);
+    leftMaster.setInverted(false);
+    leftSlave.setInverted(false);
+    rightMaster.setInverted(true);
+    rightSlave.setInverted(true);
+
+    //SetupSensor
+    leftMaster.setSensorPhase(false);
 
     //Slave motors
     leftSlave.follow(leftMaster);
@@ -56,11 +59,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void config () {
     rightMaster.configFactoryDefault();
-    leftMaster.setInverted(true);
-    leftSlave.setInverted(true);
-    rightMaster.setInverted(false);
-    rightSlave.setInverted(false);
-    leftSlave.follow(leftMaster);
+    rightMaster.setInverted(true);
     rightSlave.follow(rightMaster);
   } 
 

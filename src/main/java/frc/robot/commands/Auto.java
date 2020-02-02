@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Utils;
@@ -22,10 +23,13 @@ public class Auto extends PIDCommand {
    * Creates a new Auto.
    */
 
+   static PIDController PID;
+   Timer time = new Timer();
+
   public Auto(AHRS gyro, double angle, double initialAngle, Drivetrain drive) {
     super(
         // The controller that the co + gyro.getAngle(mmand will use
-        new PIDController(0.0135 * 0.8, 0.00, (0.0135 * 1.4)/10),
+        PID = new PIDController(0.0135 * 0.8, 0.00, (0.0135 * 1.4)/10),
         //new PIDController(0.0135 * 0.6, 1.2 * (0.0135 / 1.4), (0.0135 * 1.4 * 3)/40),
 
         // This should return the measurement
@@ -34,9 +38,10 @@ public class Auto extends PIDCommand {
         () -> angle + initialAngle,
         // This uses the output
         output -> {
-          drive.setTank(-output + Utils.absSign(-output) * 0.0, (output + Utils.absSign(output) * 0.0));
+          drive.setTank(output + Utils.absSign(output) * 0.0, (-output + Utils.absSign(-output) * 0.0));
           //drive.setTank(output, output);
         });
+        time.start();
         addRequirements(drive);
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
@@ -46,6 +51,11 @@ public class Auto extends PIDCommand {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (time.get() > 3 && (PID.getPositionError() < 1 || PID.getPositionError() > -1)) {
+      time.stop();
+      time.reset();
+      return true;
+    }
     return false;
   }
 }

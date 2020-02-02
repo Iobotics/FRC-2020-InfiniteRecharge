@@ -50,7 +50,7 @@ public final class Constants {
         public static final double kWheelDiameter = 8.00;
 
         //PID Values
-        public static final float kP = 0f;
+        public static final float kP = 0.05f;
         public static final float kI = 0f;
         public static final float kD = 0f;
         //Feed Forward
