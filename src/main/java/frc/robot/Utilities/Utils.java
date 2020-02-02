@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
+package frc.robot.Utilities;
 
 /**
  * Class for Utlity and Math function
@@ -19,4 +19,5 @@ public final class Utils {
      public static double absSign(double input){
         return (Math.abs(input) / input);
     }
+
 }
