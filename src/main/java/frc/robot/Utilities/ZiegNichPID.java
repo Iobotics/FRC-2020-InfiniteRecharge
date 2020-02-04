@@ -11,13 +11,24 @@ import edu.wpi.first.wpilibj.controller.*;
 
 /**
  * PIDController that automatically calculates PID based on Ziegler Nichols Tuning Rules.
+ * In order to tune Increase the P-gain until stable oscillation is achieved. Oscillation should not Diverge nor Converge on 0
+ * Use the P-gain found and the Period of the oscillation for the calculations
  */
 public class ZiegNichPID extends PIDController {
 
+    /**
+     *
+     * Enum to determin which combination of PID is being used
+     *   
+     * */ 
     public enum ControlType {
         P, PI, PD, PID;
     }
-
+    
+    /**
+     * @param kU the calculated Ultimate P gain of the controller
+     * @param type the combination of P I and D that will be used
+     */
     private final double calcP(double kU, ControlType type){
         switch(type){
 
@@ -38,6 +49,12 @@ public class ZiegNichPID extends PIDController {
         }
     }
 
+    /**
+     * @param kU the calculated Ultimate P gain of the controller
+     * @param tU the period of the 
+     * @param type the combination of P I and D that will be used
+     */
+
     private double calcI(double kU, double tU, ControlType type){
         switch(type){
 
@@ -57,6 +74,12 @@ public class ZiegNichPID extends PIDController {
                 return 0;
         }
     }
+
+    /**
+     * @param kU the calculated Ultimate P gain of the controller
+     * @param tU the period of the 
+     * @param type the combination of P I and D that will be used
+     */
 
     private double calcD(double kU, double tU, ControlType type){
         switch(type){
