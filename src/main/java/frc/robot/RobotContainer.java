@@ -35,7 +35,7 @@ import frc.robot.commands.AutoAlign;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  private final AHRS gyro = new AHRS();
+  
   private final Drivetrain drivetrain = new Drivetrain();
   private final Limelight limelight = new Limelight();
 
@@ -57,7 +57,7 @@ public class RobotContainer {
   }
 
   public double getGyro() {
-    return gyro.getAngle();
+    return drivetrain.getAngle();
   }
 
   /**
@@ -82,7 +82,7 @@ public class RobotContainer {
     // An ExampleCommand will run in autonomous
     return new SequentialCommandGroup(
       new AutoDrive(drivetrain, 120), 
-      new Auto(gyro, -135, gyro.getAngle(), drivetrain), 
+      new Auto(drivetrain.getGyro(), -135, drivetrain.getAngle(), drivetrain), 
       new AutoAlign(limelight, drivetrain));
     //AutoAlign(limelight, drivetrain);
     //return new AutoDrive(drivetrain, 120);

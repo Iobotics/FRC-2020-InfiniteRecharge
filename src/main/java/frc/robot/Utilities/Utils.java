@@ -20,4 +20,8 @@ public final class Utils {
         return (Math.abs(input) / input);
     }
 
+    public static double degreesToRadians(double degrees){
+        return (Math.PI * degrees) / 180;
+    }
+
 }

@@ -9,23 +9,50 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.RobotMap;
+import frc.robot.Utilities.Utils;
 
 public class Drivetrain extends SubsystemBase {
 
-  private TalonSRX leftMaster;
-  private TalonSRX rightMaster;
-  private TalonSRX leftSlave;
-  private TalonSRX rightSlave;
+  private WPI_TalonSRX leftMaster;
+  private WPI_TalonSRX rightMaster;
+  private WPI_TalonSRX leftSlave;
+  private WPI_TalonSRX rightSlave;
+
+  private DifferentialDrive tankDrive;
+
+  private AHRS gyro;
+
+  private DifferentialDriveOdometry driveOdometry;
+  private Pose2d robotPose;
 
   public Drivetrain() {
-    leftMaster = new TalonSRX(RobotMap.kLeftMaster);
-    rightMaster =  new TalonSRX(RobotMap.kRightMaster);
-    leftSlave = new TalonSRX(RobotMap.kLeftSlave);
-    rightSlave = new TalonSRX(RobotMap.kRightSlave);
+    leftMaster = new WPI_TalonSRX(RobotMap.kLeftMaster);
+    rightMaster =  new WPI_TalonSRX(RobotMap.kRightMaster);
+    leftSlave = new WPI_TalonSRX(RobotMap.kLeftSlave);
+    rightSlave = new WPI_TalonSRX(RobotMap.kRightSlave);
+
+    //Create Differential Drivesudo
+    tankDrive = new DifferentialDrive(rightMaster, rightMaster);
+    tankDrive.setRightSideInverted(false);
+
+    //Create Gyro Sensor
+    gyro = new AHRS();
+
+    //Create Drive Odometry starting 
+    driveOdometry = new DifferentialDriveOdometry(new Rotation2d(Utils.degreesToRadians(gyro.getAngle())));
+
     //Set Motor Polarities
     leftMaster.setInverted(false);
     leftSlave.setInverted(false);
@@ -34,6 +61,7 @@ public class Drivetrain extends SubsystemBase {
 
     //SetupSensor
     leftMaster.setSensorPhase(false);
+    rightMaster.setSensorPhase(false);
 
     //Slave motors
     leftSlave.follow(leftMaster);
@@ -92,21 +120,31 @@ public class Drivetrain extends SubsystemBase {
     leftMaster.set(ControlMode.MotionMagic, targetPos);
   }
 
-  //Are we there yet
-  public boolean isTargetAchieved (double distance, double error) {
-    double rotations = (distance * DrivetrainConstants.kGearRatio)/(DrivetrainConstants.kWheelDiameter*Math.PI);
-    double targetPos = rotations*2048;
-    //converting allowed error from inches to encoder units
-    double allowedError = ((error * DrivetrainConstants.kGearRatio)/(DrivetrainConstants.kWheelDiameter * Math.PI) * 2048);
-    if(Math.abs(leftMaster.getSelectedSensorPosition() - targetPos) <= allowedError){
-      return true;
-    } else{
-      return false;
-    }
+  public double getAngle(){
+    return gyro.getAngle();
+  }
+
+  public AHRS getGyro(){
+    return gyro;
+  }
+
+
+  /**
+   * Updates the bots Position and returns the value as a pose 2d 
+   * @return Pose2D of bot, containing X, Y, and Rotation Values
+   * */
+  public Pose2d updateOdometry(){
+    return driveOdometry.update(new Rotation2d(Utils.degreesToRadians(gyro.getAngle())), 
+    leftMaster.getSelectedSensorPosition(), 
+    rightMaster.getSelectedSensorPosition());
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    //Update Robot Position and Print Values to the Dashboard
+    robotPose = updateOdometry();
+    SmartDashboard.putNumber("Bot X", robotPose.getTranslation().getX());
+    SmartDashboard.putNumber("Bot Y", robotPose.getTranslation().getX());
+    SmartDashboard.putNumber("Bot Rotation", robotPose.getRotation().getDegrees());
   }
 }
