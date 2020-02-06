@@ -7,6 +7,8 @@
 
 package frc.robot.Utilities;
 
+import frc.robot.Constants.DrivetrainConstants;
+
 /**
  * Class for Utlity and Math function
  */
@@ -22,6 +24,22 @@ public final class Utils {
 
     public static double degreesToRadians(double degrees){
         return (Math.PI * degrees) / 180;
+    }
+
+    public static double feetToMeters(double feet){
+        return feet * 0.3048;
+    }
+
+    public static double ticksToInches(double ticks){
+        return ((ticks / 2048) / DrivetrainConstants.kGearRatio) * Math.PI * DrivetrainConstants.kWheelDiameter;
+    }
+
+    public static double inchesToTicks(double inches){
+        return (inches * DrivetrainConstants.kGearRatio)/(DrivetrainConstants.kWheelDiameter*Math.PI);
+    }
+
+    public static double ticksToMeters(double ticks){
+        return feetToMeters(ticksToInches(ticks) / 12);
     }
 
 }

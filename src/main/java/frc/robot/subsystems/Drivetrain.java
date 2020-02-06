@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -25,10 +26,10 @@ import frc.robot.Utilities.Utils;
 
 public class Drivetrain extends SubsystemBase {
 
-  private WPI_TalonSRX leftMaster;
-  private WPI_TalonSRX rightMaster;
-  private WPI_TalonSRX leftSlave;
-  private WPI_TalonSRX rightSlave;
+  private WPI_TalonFX leftMaster;
+  private WPI_TalonFX rightMaster;
+  private WPI_TalonFX leftSlave;
+  private WPI_TalonFX rightSlave;
 
   private DifferentialDrive tankDrive;
 
@@ -38,10 +39,19 @@ public class Drivetrain extends SubsystemBase {
   private Pose2d robotPose;
 
   public Drivetrain() {
-    leftMaster = new WPI_TalonSRX(RobotMap.kLeftMaster);
-    rightMaster =  new WPI_TalonSRX(RobotMap.kRightMaster);
-    leftSlave = new WPI_TalonSRX(RobotMap.kLeftSlave);
-    rightSlave = new WPI_TalonSRX(RobotMap.kRightSlave);
+    leftMaster = new WPI_TalonFX(RobotMap.kLeftMaster);
+    rightMaster =  new WPI_TalonFX(RobotMap.kRightMaster);
+    leftSlave = new WPI_TalonFX(RobotMap.kLeftSlave);
+    rightSlave = new WPI_TalonFX(RobotMap.kRightSlave);
+
+    //Clear MotorValues
+    leftMaster.configFactoryDefault();
+    rightMaster.configFactoryDefault();
+    leftSlave.configFactoryDefault();
+    rightSlave.configFactoryDefault();
+    
+    leftMaster.setSelectedSensorPosition(0);
+    rightMaster.setSelectedSensorPosition(0);
 
     //Create Differential Drivesudo
     tankDrive = new DifferentialDrive(rightMaster, rightMaster);
@@ -102,6 +112,16 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
+   * Sets motor power based on voltage for trajectory control
+   * @param leftVolt
+   * @param rightVolt
+   */
+  public void setVoltage(double leftVolt, double rightVolt){
+    leftMaster.setVoltage(leftVolt);
+    rightMaster.setVoltage(leftVolt);
+  }
+
+  /**
    * Moves to the given amount of inches using motion magic
    * @param distance distance to move (inches)
    * @param speed cruising speed of motor in inches per second
@@ -120,8 +140,20 @@ public class Drivetrain extends SubsystemBase {
     leftMaster.set(ControlMode.MotionMagic, targetPos);
   }
 
+  /**
+   * 
+   * @return returns the angle as given by the gyro
+   */
   public double getAngle(){
     return gyro.getAngle();
+  }
+
+  /**
+   * 
+   * @return returns the value of rotation from 0 - 360
+   */
+  public double getHeading(){
+    return Math.IEEEremainder(getAngle(), 360);
   }
 
   public AHRS getGyro(){
@@ -134,9 +166,13 @@ public class Drivetrain extends SubsystemBase {
    * @return Pose2D of bot, containing X, Y, and Rotation Values
    * */
   public Pose2d updateOdometry(){
-    return driveOdometry.update(new Rotation2d(Utils.degreesToRadians(gyro.getAngle())), 
-    leftMaster.getSelectedSensorPosition(), 
-    rightMaster.getSelectedSensorPosition());
+    return driveOdometry.update(new Rotation2d(Utils.degreesToRadians(getHeading())), 
+    Utils.ticksToMeters((double) leftMaster.getSelectedSensorPosition()), 
+    Utils.ticksToMeters(rightMaster.getSelectedSensorPosition()));
+  }
+
+  public void resetOdometry(){
+    driveOdometry.resetPosition(new Pose2d() ,new Rotation2d(Utils.degreesToRadians(getHeading())));
   }
 
   @Override
