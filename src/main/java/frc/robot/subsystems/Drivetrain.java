@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -36,6 +37,7 @@ public class Drivetrain extends SubsystemBase {
   private AHRS gyro;
 
   private DifferentialDriveOdometry driveOdometry;
+  private DifferentialDriveKinematics driveKinematics;
   private Pose2d robotPose;
 
   public Drivetrain() {
@@ -62,6 +64,9 @@ public class Drivetrain extends SubsystemBase {
 
     //Create Drive Odometry starting 
     driveOdometry = new DifferentialDriveOdometry(new Rotation2d(Utils.degreesToRadians(gyro.getAngle())));
+
+    //Create Drive Kinematics
+    driveKinematics = new DifferentialDriveKinematics(DrivetrainConstants.kTrackWidth);
 
     //Set Motor Polarities
     leftMaster.setInverted(false);
