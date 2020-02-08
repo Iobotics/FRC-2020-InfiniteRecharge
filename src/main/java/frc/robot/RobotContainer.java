@@ -81,10 +81,21 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new SequentialCommandGroup(
-      new AutoDrive(drivetrain, 120), 
-      new Auto(gyro, -135, gyro.getAngle(), drivetrain), 
-      new AutoAlign(limelight, drivetrain));
+    /*return new SequentialCommandGroup(
+      new AutoDrive(drivetrain, 130.36), 
+      new Auto(gyro, -135, gyro.getAngle(), drivetrain) //input the actual measured angle theta later as well as add shoot and intake commands
+      );*/
+      return new SequentialCommandGroup(
+        new AutoDrive(drivetrain, 120),
+        new Auto(gyro, -90, gyro.getAngle(), drivetrain),
+        new AutoDrive(drivetrain, 120),
+        new Auto(gyro, -90, gyro.getAngle(), drivetrain),
+        new AutoDrive(drivetrain, 120),
+        new Auto(gyro, -90, gyro.getAngle(), drivetrain),
+        new AutoDrive(drivetrain, 120),
+        new Auto(gyro, -90, gyro.getAngle(), drivetrain));
+      )
+    //new AutoAlign(limelight, drivetrain)
     //AutoAlign(limelight, drivetrain);
     //return new AutoDrive(drivetrain, 120);
   }
