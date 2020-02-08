@@ -41,5 +41,4 @@ public final class Utils {
     public static double ticksToMeters(double ticks){
         return feetToMeters(ticksToInches(ticks) / 12);
     }
-
 }

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoDrive;
+import frc.robot.commands.RamseteAuto;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,6 +22,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants.OIConstants;
+import frc.robot.Utilities.Trajectories;
+
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.commands.Auto;
 import frc.robot.commands.AutoAlign;
@@ -80,11 +83,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new SequentialCommandGroup(
-      new AutoDrive(drivetrain, 120), 
-      new Auto(drivetrain.getGyro(), -135, drivetrain.getAngle(), drivetrain), 
-      new AutoAlign(limelight, drivetrain));
-    //AutoAlign(limelight, drivetrain);
-    //return new AutoDrive(drivetrain, 120);
+    return new RamseteAuto(drivetrain, new Trajectories(drivetrain.getConfig()).getExample());
   }
 }

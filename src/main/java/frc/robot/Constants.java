@@ -36,6 +36,8 @@ public final class Constants {
         public static final int kArticulatingHood = 5;
     }
 
+
+
     public static final class OIConstants{
         public static final int kJoystick1 = 0;
         public static final int kJoystick2 = 1;
@@ -47,6 +49,8 @@ public final class Constants {
         //Xbox controller
         public static final int kRunShooter = 6;
     }
+
+
 
     public static final class DrivetrainConstants {
         public static final double kGearRatio = 10.71;
@@ -81,6 +85,10 @@ public final class Constants {
         //Ramsete Variables
         public static final double kRamseteB = 2;
         public static final double kRamseteZeta = 0.7;
+
+        //P gain for Ramsete Controller 
+        //TODO: find values using robot characterizer
+        public static final double kPRamseteVel = 0;
     
     }
 

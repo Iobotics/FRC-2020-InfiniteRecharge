@@ -7,19 +7,26 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.music.Orchestra;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.RobotMap;
@@ -39,6 +46,10 @@ public class Drivetrain extends SubsystemBase {
   private DifferentialDriveOdometry driveOdometry;
   private DifferentialDriveKinematics driveKinematics;
   private Pose2d robotPose;
+  private DifferentialDriveVoltageConstraint voltageConstraint;
+  private TrajectoryConfig config;
+
+  private Orchestra orchestra;
 
   public Drivetrain() {
     leftMaster = new WPI_TalonFX(RobotMap.kLeftMaster);
@@ -62,11 +73,28 @@ public class Drivetrain extends SubsystemBase {
     //Create Gyro Sensor
     gyro = new AHRS();
 
+    /**
+     * Trajectory Control
+     */
+
     //Create Drive Odometry starting 
     driveOdometry = new DifferentialDriveOdometry(new Rotation2d(Utils.degreesToRadians(gyro.getAngle())));
 
     //Create Drive Kinematics
     driveKinematics = new DifferentialDriveKinematics(DrivetrainConstants.kTrackWidth);
+
+    //Voltage Constraings
+    voltageConstraint = new DifferentialDriveVoltageConstraint(
+      new SimpleMotorFeedforward(DrivetrainConstants.ksVolts, DrivetrainConstants.kvVoltSecondsPerMeter, DrivetrainConstants.kaVoltSecondsSquaredPerMeter), 
+      driveKinematics, 10);
+
+    //Config for Trajectory with max Acceleration and Velocity (in meters)
+    config = new TrajectoryConfig(DrivetrainConstants.kMaxVel, DrivetrainConstants.kMaxAcc)
+      //Add Kinematics to config
+      .setKinematics(driveKinematics)
+      //Add Constraints to config
+      .addConstraint(voltageConstraint);
+
 
     //Set Motor Polarities
     leftMaster.setInverted(false);
@@ -95,6 +123,13 @@ public class Drivetrain extends SubsystemBase {
     leftMaster.config_kI(0, DrivetrainConstants.kI);
     leftMaster.config_kD(0, DrivetrainConstants.kD);
     leftMaster.config_kF(0, DrivetrainConstants.kF);
+
+    //Create Orchestra to play music
+    orchestra = new Orchestra();
+    orchestra.addInstrument(leftMaster);
+    orchestra.addInstrument(rightMaster);
+    orchestra.addInstrument(leftSlave);
+    orchestra.addInstrument(rightSlave);
   }
 
   /**
@@ -176,8 +211,44 @@ public class Drivetrain extends SubsystemBase {
     Utils.ticksToMeters(rightMaster.getSelectedSensorPosition()));
   }
 
+  /**
+   * @return the pose of the robot in coordinate meters
+   */
+  public Pose2d getPose(){
+    return driveOdometry.getPoseMeters();
+  }
+
   public void resetOdometry(){
     driveOdometry.resetPosition(new Pose2d() ,new Rotation2d(Utils.degreesToRadians(getHeading())));
+  }
+
+  /**
+   * @return the trajectory config of the drivetrain
+   */
+  public TrajectoryConfig getConfig(){
+    return config;
+  }
+
+  /**
+   * @return the calculated Kinematics of the bot
+   */
+  public DifferentialDriveKinematics getKinematics(){
+    return driveKinematics;
+  }
+  
+  /**
+   * @return the wheels speeds of the robot in m/s as a DifferentialWheelSpeeds
+   */
+  public DifferentialDriveWheelSpeeds getWheelSpeeds(){
+    return new DifferentialDriveWheelSpeeds(
+      Utils.ticksToMeters((double) leftMaster.getSelectedSensorVelocity()) * 10, 
+      Utils.ticksToMeters((double) rightMaster.getSelectedSensorVelocity()) * 10);
+  }
+
+  //Play Song
+  public void playMusic(String song){
+    orchestra.loadMusic(song);
+    orchestra.play();
   }
 
   @Override
