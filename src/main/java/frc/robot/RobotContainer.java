@@ -94,7 +94,6 @@ public class RobotContainer {
         new Auto(gyro, -90, gyro.getAngle(), drivetrain),
         new AutoDrive(drivetrain, 120),
         new Auto(gyro, -90, gyro.getAngle(), drivetrain));
-      )
     //new AutoAlign(limelight, drivetrain)
     //AutoAlign(limelight, drivetrain);
     //return new AutoDrive(drivetrain, 120);

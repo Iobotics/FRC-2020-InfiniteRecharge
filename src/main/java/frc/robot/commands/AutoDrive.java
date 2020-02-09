@@ -17,7 +17,6 @@ public class AutoDrive extends CommandBase {
 
   double distance;
 
-  boolean finished = false;
   public AutoDrive(Drivetrain drivetrain, double distance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrain = drivetrain;
@@ -36,7 +35,6 @@ public class AutoDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    finished = drivetrain.isTargetAchieved(distance, 10);
   }
 
   // Called once the command ends or is interrupted.
@@ -49,6 +47,6 @@ public class AutoDrive extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished;
+    return drivetrain.isTargetAchieved(distance, 10);
   }
 }
