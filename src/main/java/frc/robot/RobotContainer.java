@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoDrive;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Lift;
 import frc.robot.subsystems.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -50,8 +51,14 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    //Default Drivetrain command is tank drive
     drivetrain.setDefaultCommand(new RunCommand(
         () -> drivetrain.setTank(Math.pow(-joystick1.getY(), 3), Math.pow(-joystick2.getY(), 3)), drivetrain));
+    
+    
+
+    //Default Limelight command 
     limelight.setDefaultCommand(new RunCommand(() -> limelight.printValues(), limelight));
 
   }
@@ -69,9 +76,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(joystick1, 2).whenPressed(new AutoAlign(limelight, drivetrain));
-    new JoystickButton(joystick1, 1).whenPressed(new StartEndCommand(
-        () -> drivetrain.setTank(SmartDashboard.getNumber("power", 1), SmartDashboard.getNumber("power", 1)),
-        () -> drivetrain.setTank(0, 0)));
+   
   }
 
   /**
@@ -81,10 +86,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    /*return new SequentialCommandGroup(
-      new AutoDrive(drivetrain, 130.36), 
-      new Auto(gyro, -135, gyro.getAngle(), drivetrain) //input the actual measured angle theta later as well as add shoot and intake commands
-      );*/
+    
       return new SequentialCommandGroup(
         new AutoDrive(drivetrain, 120),
         new Auto(gyro, -90, gyro.getAngle(), drivetrain),
