@@ -39,6 +39,7 @@ public class RobotContainer {
   private final AHRS gyro = new AHRS();
   private final Drivetrain drivetrain = new Drivetrain();
   private final Limelight limelight = new Limelight();
+  private final Lift lift = new Lift();
 
   private final Joystick joystick1 = new Joystick(OIConstants.kJoystick1);
   private final Joystick joystick2 = new Joystick(OIConstants.kJoystick2);
@@ -56,7 +57,8 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(new RunCommand(
         () -> drivetrain.setTank(Math.pow(-joystick1.getY(), 3), Math.pow(-joystick2.getY(), 3)), drivetrain));
     
-    
+    //Default Lift Commmand Brakes Lifr
+    lift.setDefaultCommand(new RunCommand(()->lift.setLift(0)));
 
     //Default Limelight command 
     limelight.setDefaultCommand(new RunCommand(() -> limelight.printValues(), limelight));
@@ -76,7 +78,9 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(joystick1, 2).whenPressed(new AutoAlign(limelight, drivetrain));
-   
+    
+    //Lift Test Button
+    new JoystickButton(joystick1, 1).whenPressed(new RunCommand(()->lift.setLift(joystick1.getZ())));
   }
 
   /**

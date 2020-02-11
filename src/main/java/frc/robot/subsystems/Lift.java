@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.RemoteLimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -30,7 +31,8 @@ public class Lift extends SubsystemBase {
     liftSlave = new TalonSRX(RobotMap.kLiftSlave);
     liftSlave.follow(liftMaster);
     liftMaster.setInverted(false);
-    
+    liftMaster.setNeutralMode(NeutralMode.Brake);
+
     //Configure Limti Switches for lift, bottom Switch is on the slave and top switch is on the master
     liftMaster.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
     liftMaster.configReverseLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen, RobotMap.kLiftSlave);
