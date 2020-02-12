@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.commands.AutoDrive;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Limelight;
@@ -54,6 +55,7 @@ public class RobotContainer {
         () -> drivetrain.setTank(Math.pow(-joystick1.getY(), 3), Math.pow(-joystick2.getY(), 3)), drivetrain));
     limelight.setDefaultCommand(new RunCommand(() -> limelight.printValues(), limelight));
 
+    SmartDashboard.putNumber("Auto Number", 0);
   }
 
   public double getGyro() {
@@ -81,9 +83,10 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
+    if(SmartDashboard = )
     /*return new SequentialCommandGroup(
       new AutoDrive(drivetrain, 130.36), 
-      new Auto(gyro, -135, gyro.getAngle(), drivetrain) //input the actual measured angle theta later as well as add shoot and intake commands
+      new Auto(gyro, 14.18, gyro.getAngle(), drivetrain) //input the actual measured angle theta later as well as add shoot and intake commands
       );*/
       return new SequentialCommandGroup(
         new AutoDrive(drivetrain, 120),
