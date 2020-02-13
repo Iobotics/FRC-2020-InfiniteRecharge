@@ -23,6 +23,8 @@ public class Machinelearning extends SubsystemBase {
    private NetworkTableEntry boxes;
    private NetworkTableEntry number;
    private NetworkTableEntry classes;
+   private int MclassNumber =0;
+   private double[][] coordinatesTable;
 
    double[] coordinates;
    double[] defaultValue = new double [0];
@@ -33,7 +35,6 @@ public class Machinelearning extends SubsystemBase {
     boxes = table.getEntry("boxes");
     number = table.getEntry("nb_objects");
     classes = table.getEntry("object_classes");
-  
     inst.startClientTeam(2438);
     inst.startDSClient();
 
@@ -52,21 +53,41 @@ public class Machinelearning extends SubsystemBase {
  {
    return classes.getString("None");
  }
+
  public double getTargetNumber()
  {
    return number.getDouble(0.0);
  }
- public void printValues()
+
+ public double[] getCoordinate()
+ {
+   return boxes.getDoubleArray(defaultValue);
+ }
+
+ public double[][] displayCoordinate()
+ {
+   MclassNumber = (int)this.getTargetNumber();
+   for(int i =1; i<= MclassNumber; i++) {
+     for(int j = 0; j<=3; j++ )
+      coordinatesTable[i][j]= this.getCoordinate()[j];
+     }  
+     return coordinatesTable;
+   }
+
+  public void printValues()
  {
   SmartDashboard.putNumber("DetectedNumber", this.getTargetNumber());
   SmartDashboard.putString("ClassName", this.getClassName());
-
-
+  SmartDashboard.putNumberArray("coordinates", this.getCoordinate());
+  for(int i=1; i<= (int)this.getTargetNumber(); i++){
+  SmartDashboard.putNumberArray("coordinateTable", this.displayCoordinate()[i]);
+  }
  }
+
   @Override
   public void periodic() {
-    coordinates = boxes.getDoubleArray(defaultValue);
-    SmartDashboard.putNumberArray("coordinates", coordinates);
+    
+    
     // This method will be called once per scheduler run
   }
 }
