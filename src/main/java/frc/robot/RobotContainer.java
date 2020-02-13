@@ -53,7 +53,7 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(new RunCommand(
         () -> drivetrain.setTank(Math.pow(-joystick1.getY(), 3), Math.pow(-joystick2.getY(), 3)), drivetrain));
     limelight.setDefaultCommand(new RunCommand(() -> limelight.printValues(), limelight));
-
+    SmartDashboard.putNumber("Auto Number", 0);
   }
 
   public double getGyro() {
@@ -81,10 +81,12 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    /*return new SequentialCommandGroup(
+    if(SmartDashboard.getNumber("Auto Number", 0) == 0){
+      return new SequentialCommandGroup(
       new AutoDrive(drivetrain, 130.36), 
       new Auto(gyro, -135, gyro.getAngle(), drivetrain) //input the actual measured angle theta later as well as add shoot and intake commands
-      );*/
+      );
+    }else if(SmartDashboard.getNumber("Auto Number", 0) == 1){
       return new SequentialCommandGroup(
         new AutoDrive(drivetrain, 120),
         new Auto(gyro, -90, gyro.getAngle(), drivetrain),
@@ -94,6 +96,19 @@ public class RobotContainer {
         new Auto(gyro, -90, gyro.getAngle(), drivetrain),
         new AutoDrive(drivetrain, 120),
         new Auto(gyro, -90, gyro.getAngle(), drivetrain));
+    }else if(SmartDashboard.getNumber("Auto Number", 0) == 2){
+      return new SequentialCommandGroup(
+        new AutoDrive(drivetrain, 10),
+        new Auto(gyro, 180, gyro.getAngle(), drivetrain),
+        //shoot ball here with shooter at angle theta
+        new Auto(gyro, 180, gyro.getAngle(), drivetrain));
+    }else{
+      return new SequentialCommandGroup(
+        //shoot balls
+        new Auto(gyro, 180, gyro.getAngle(), drivetrain),
+        new AutoDrive(drivetrain, 20));
+    }
+    
     //new AutoAlign(limelight, drivetrain)
     //AutoAlign(limelight, drivetrain);
     //return new AutoDrive(drivetrain, 120);
