@@ -39,6 +39,14 @@ public class Lift extends SubsystemBase {
     liftMaster.overrideLimitSwitchesEnable(false);
   }
 
+  public boolean getForwardLimit(){
+    return liftMaster.getSensorCollection().isFwdLimitSwitchClosed();
+  }
+
+  public boolean getRevLimit(){
+    return liftMaster.getSensorCollection().isRevLimitSwitchClosed();
+  }
+  
   public void setLift(double power){
     liftMaster.set(ControlMode.PercentOutput, power);
   }
