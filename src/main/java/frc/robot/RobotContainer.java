@@ -50,8 +50,14 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    //Default Drivetrain command is tank drive
     drivetrain.setDefaultCommand(new RunCommand(
         () -> drivetrain.setTank(Math.pow(-joystick1.getY(), 3), Math.pow(-joystick2.getY(), 3)), drivetrain));
+    
+    
+
+    //Default Limelight command 
     limelight.setDefaultCommand(new RunCommand(() -> limelight.printValues(), limelight));
     SmartDashboard.putNumber("Auto Number", 0);
   }
@@ -69,9 +75,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(joystick1, 2).whenPressed(new AutoAlign(limelight, drivetrain));
-    new JoystickButton(joystick1, 1).whenPressed(new StartEndCommand(
-        () -> drivetrain.setTank(SmartDashboard.getNumber("power", 1), SmartDashboard.getNumber("power", 1)),
-        () -> drivetrain.setTank(0, 0)));
+   
   }
 
   /**
