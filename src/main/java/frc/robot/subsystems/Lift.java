@@ -7,6 +7,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.ResourceBundle.Control;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
@@ -49,6 +51,10 @@ public class Lift extends SubsystemBase {
   
   public void setLift(double power){
     liftMaster.set(ControlMode.PercentOutput, power);
+  }
+
+  public void setLiftPosition(double pos){
+    liftMaster.set(ControlMode.Position, pos);
   }
 
   @Override

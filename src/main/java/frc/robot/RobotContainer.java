@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoDrive;
+import frc.robot.commands.RunLift;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Lift;
 import frc.robot.subsystems.Limelight;
@@ -81,6 +82,7 @@ public class RobotContainer {
     
     //Lift Test Button
     new JoystickButton(joystick1, 1).whenPressed(new RunCommand(()->lift.setLift(joystick1.getZ())));
+    new JoystickButton(joystick1, 3).whenHeld(new RunLift(lift, joystick1.getZ()));
   }
 
   /**
