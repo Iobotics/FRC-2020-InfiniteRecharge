@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoDrive;
+import frc.robot.commands.AutoHopper;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -38,7 +40,7 @@ public class RobotContainer {
   private final AHRS gyro = new AHRS();
   private final Drivetrain drivetrain = new Drivetrain();
   private final Limelight limelight = new Limelight();
-
+  private final Hopper hopper = new Hopper();
   private final Joystick joystick1 = new Joystick(OIConstants.kJoystick1);
   private final Joystick joystick2 = new Joystick(OIConstants.kJoystick2);
 
@@ -59,6 +61,7 @@ public class RobotContainer {
 
     //Default Limelight command 
     limelight.setDefaultCommand(new RunCommand(() -> limelight.printValues(), limelight));
+    hopper.setDefaultCommand(new AutoHopper(hopper, 0.5));
     SmartDashboard.putNumber("Auto Number", 0);
   }
 
