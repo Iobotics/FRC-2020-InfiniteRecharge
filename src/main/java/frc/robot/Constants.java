@@ -18,18 +18,31 @@ package frc.robot;
 public final class Constants {
     public static final class RobotMap{
         //Drivetrain
-        public static final int kLeftMaster = 1;
-        public static final int kRightMaster = 4;
-        public static final int kLeftSlave = 2;
+        public static final int kLeftMaster = 0;
+        public static final int kRightMaster = 2;
+        public static final int kLeftSlave = 1  ;
         public static final int kRightSlave = 3;
 
-        public static final int kControlPanelSpinner = 6;
+        //Intake
+        public static final int kIntake = 4;
+        public static final int kIntakeArm = 5;
 
-        public static final int kIntake = 9;
+        //Hopper
+        public static final int kFrontHopper = 6;
+        public static final int kBackHopper = 7;
+        public static final int kIndexerMaster = 14;
+        public static final int kIndexerSlave = 15;
+        public static final int kHopperIntakeProximitySensor = 16;
+        public static final int kHopperOuttakeProximitySensor = 17;
         
-        public static final int kLeftShooter = 7;
-        public static final int kRightShooter = 10;
-        public static final int kArticulatingHood = 5;
+        //Articulating Hood
+        public static final int kLeftShooter = 8;
+        public static final int kRightShooter = 9;
+        public static final int kArticulatingHood = 10;
+
+        //Lift
+        public static final int kLiftMaster = 12;
+        public static final int kLiftSlave = 13;
     }
 
     public static final class OIConstants{
@@ -46,13 +59,13 @@ public final class Constants {
 
     public static final class DrivetrainConstants {
         public static final double kGearRatio = 10.71;
-        //in inches
-        public static final double kWheelDiameter = 8.00;
+        public static final double kWheelDiameter = 8.00;        //in inches
 
         //PID Values
-        public static final float kP = 0f;
+        public static final float kP = 0.05f;
         public static final float kI = 0f;
         public static final float kD = 0f;
+        
         //Feed Forward
         public static final float kF = 0.0457f;
     }

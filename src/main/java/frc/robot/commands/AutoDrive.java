@@ -6,8 +6,6 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
@@ -19,7 +17,6 @@ public class AutoDrive extends CommandBase {
 
   double distance;
 
-  boolean finished = false;
   public AutoDrive(Drivetrain drivetrain, double distance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrain = drivetrain;
@@ -32,13 +29,12 @@ public class AutoDrive extends CommandBase {
   @Override
   public void initialize() {
     drivetrain.stop();
-    drivetrain.motionMagic(distance, 36);
+    drivetrain.motionMagic(distance, 5);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    finished = drivetrain.isTargetAchieved(distance, 2);
   }
 
   // Called once the command ends or is interrupted.
@@ -51,6 +47,6 @@ public class AutoDrive extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished;
+    return drivetrain.isTargetAchieved(distance, 10);
   }
 }

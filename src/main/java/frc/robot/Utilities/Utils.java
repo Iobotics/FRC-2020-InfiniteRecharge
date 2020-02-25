@@ -5,20 +5,19 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems;
+package frc.robot.Utilities;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+/**
+ * Class for Utlity and Math function
+ */
+public final class Utils {
+    /**
+     * 
+     * @param input
+     * @return takes input number and returns its sign (e.g. -100 becomes -1, 69 becomes 1, etc.)
+     */
+     public static double absSign(double input){
+        return (Math.abs(input) / input);
+    }
 
-public class ExampleSubsystem extends SubsystemBase {
-  /**
-   * Creates a new ExampleSubsystem.
-   */
-  public ExampleSubsystem() {
-
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
 }

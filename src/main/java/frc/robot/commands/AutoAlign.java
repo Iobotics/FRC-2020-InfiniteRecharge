@@ -7,62 +7,41 @@
 
 package frc.robot.commands;
 
-import com.kauailabs.navx.frc.AHRS;
-
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
-import frc.robot.RobotContainer;
-import frc.robot.Utilities.Utils;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Limelight;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class Auto extends PIDCommand {
+public class AutoAlign extends PIDCommand {
   /**
-   * Creates a new Auto.
+   * Creates a new AutoAlign.
    */
 
-   static PIDController PID;
-   Timer time = new Timer();
-   AHRS gyro;
-
-  public Auto(AHRS gyro, double angle, double initialAngle, Drivetrain drive) {
+  public AutoAlign(Limelight limelight, Drivetrain drive) {
     super(
-        // The controller that the co + gyro.getAngle(mmand will use
-        PID = new PIDController(0.0135 * 0.8, 0.00, (0.0135 * 1.4)/10),
-        //new PIDController(0.0135 * 0.6, 1.2 * (0.0135 / 1.4), (0.0135 * 1.4 * 3)/40),
-
+        // The controller that the command will use
+        new PIDController(0.007, 0, 0),
         // This should return the measurement
-        gyro::getAngle,
+        limelight::getTX,
         // This should return the setpoint (can also be a constant)
-        () -> angle + initialAngle,
+        () -> 0,
         // This uses the output
         output -> {
-          drive.setTank(output + Utils.absSign(output) * 0.0, (-output + Utils.absSign(-output) * 0.0));
-          //drive.setTank(output, output);
+          drive.setTank(output, -output);
+          // Use the output here
         });
-        this.gyro = gyro;
-        time.start();
-        addRequirements(drive);
+        addRequirements(drive,limelight);
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
   }
 
-  
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double gyroAngles [] = {0, 0};
-    gyroAngles[1] = gyroAngles[0];
-    gyroAngles[0] = gyro.getAngle();
-    if (time.get() > 3 && (PID.getPositionError() < 1 || PID.getPositionError() > -1) && (gyroAngles[0] - gyroAngles[1] == 0)){
-      time.stop();
-      time.reset();
-      return true;
-    }else{
-      return false;
-    }
+    return false;
   }
 }

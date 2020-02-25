@@ -26,10 +26,26 @@ public class Drivetrain extends SubsystemBase {
     rightMaster =  new TalonSRX(RobotMap.kRightMaster);
     leftSlave = new TalonSRX(RobotMap.kLeftSlave);
     rightSlave = new TalonSRX(RobotMap.kRightSlave);
+    //Set Motor Polarities
+    leftMaster.setInverted(false);
+    leftSlave.setInverted(false);
     rightMaster.setInverted(true);
     rightSlave.setInverted(true);
+
+    //SetupSensor
+    leftMaster.setSensorPhase(false);
+
+    //Slave motors
     leftSlave.follow(leftMaster);
     rightSlave.follow(rightMaster);
+
+    //Config Slave Deadband
+    leftSlave.configNeutralDeadband(0);
+    rightSlave.configNeutralDeadband(0);
+
+    //Config Ramp Rate
+    leftMaster.configOpenloopRamp(0.51);
+    rightMaster.configOpenloopRamp(0.52);
 
     //Configure PIDF values for Auto drive, the Left Master is the master controller for PID
     leftMaster.config_kP(0, DrivetrainConstants.kP);
@@ -44,8 +60,6 @@ public class Drivetrain extends SubsystemBase {
   public void config () {
     rightMaster.configFactoryDefault();
     rightMaster.setInverted(true);
-    rightSlave.setInverted(true);
-    leftSlave.follow(leftMaster);
     rightSlave.follow(rightMaster);
   } 
 
@@ -84,7 +98,7 @@ public class Drivetrain extends SubsystemBase {
     double targetPos = rotations*2048;
     //converting allowed error from inches to encoder units
     double allowedError = ((error * DrivetrainConstants.kGearRatio)/(DrivetrainConstants.kWheelDiameter * Math.PI) * 2048);
-    if(Math.abs(leftMaster.getSelectedSensorPosition() - targetPos) <= allowedError){
+    if(Math.abs(leftMaster.getSelectedSensorPosition() - targetPos) <= allowedError && leftMaster.getSelectedSensorVelocity() == 0.0 && leftMaster.getActiveTrajectoryVelocity() < 3) {
       return true;
     } else{
       return false;
