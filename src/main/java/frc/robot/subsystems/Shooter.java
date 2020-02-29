@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.RobotMap;
 import frc.robot.Constants.ShooterConstants;
+import io.github.oblarg.oblog.annotations.Log;
 
 public class Shooter extends SubsystemBase {
 
@@ -23,6 +24,12 @@ public class Shooter extends SubsystemBase {
   private TalonSRX rightShooter;
 
   private TalonSRX articulatiungHood;
+
+  @Log
+  private double RPM;
+
+  @Log
+  private double hoodPos;
 
   /**
    * Creates a new Shooter.
@@ -55,7 +62,7 @@ public class Shooter extends SubsystemBase {
 
   public void setVelocity(double rpm) {
     //Convert Revolutions per Minute (RPM) to Cycles per 100 milliseconds (cpm) for closed loop controller
-    double cpm = rpm * 600 / 8192; 
+    double cpm = (rpm / 600) * 8192; 
     leftShooter.set(ControlMode.Velocity, cpm); 
   }
 
@@ -70,6 +77,13 @@ public class Shooter extends SubsystemBase {
     articulatiungHood.set(ControlMode.Position, (percentFoward * (HoodConstants.hoodTop - HoodConstants.hoodBottom)) + HoodConstants.hoodBottom);
   }
 
+  public double getHood(){
+    return articulatiungHood.getSelectedSensorPosition();
+  }
+
+  /**
+   * @param position sets position in terms of encoder values
+   */
   public void setHoodAbsolute (double position){
       articulatiungHood.set(ControlMode.Position, position);
   }
@@ -82,12 +96,13 @@ public class Shooter extends SubsystemBase {
     articulatiungHood.set(ControlMode.PercentOutput, speed);
   } 
 
-  public double getRPM(){
-    leftShooter.getSelectedSensorVelocity() 
+  public double getRPM(){ 
+    return (leftShooter.getSelectedSensorVelocity() * 600) / 8192; 
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    RPM = getRPM();
+    hoodPos = getHood();
   }
 }
