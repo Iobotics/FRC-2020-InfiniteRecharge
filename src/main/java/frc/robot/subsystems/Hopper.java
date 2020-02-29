@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFXPIDSetConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,10 +21,12 @@ public class Hopper extends SubsystemBase {
   /**
    * Creates a new Hopper.
    */
-  private final TalonSRX frontHopper;
-  private final TalonSRX backHopper;
-  private final TalonSRX indexerMaster;
-  private final TalonSRX indexerSlave;
+
+   //change to mini neos
+  private final CANSparkMax frontHopper;
+  private final CANSparkMax backHopper;
+  private final CANSparkMax indexerMaster;
+  private final CANSparkMax indexerSlave;
 
   private final DigitalInput proximitySensorIntake;
   private final DigitalInput proximitySensorOuttake;
@@ -31,11 +34,11 @@ public class Hopper extends SubsystemBase {
   private double ballCount = 0;
 
   public Hopper() {
-    frontHopper = new TalonSRX(Constants.RobotMap.kFrontHopper);
-    backHopper = new TalonSRX(Constants.RobotMap.kBackHopper);
+    frontHopper = new CANSparkMax(Constants.RobotMap.kFrontHopper, MotorType.kBrushless);
+    backHopper = new CANSparkMax(Constants.RobotMap.kBackHopper, MotorType.kBrushless);
 
-    indexerMaster = new TalonSRX(Constants.RobotMap.kIndexerMaster);
-    indexerSlave = new TalonSRX(Constants.RobotMap.kIndexerSlave);
+    indexerMaster = new CANSparkMax(Constants.RobotMap.kIndexerMaster, MotorType.kBrushless);
+    indexerSlave = new CANSparkMax(Constants.RobotMap.kIndexerSlave, MotorType.kBrushless);
 
     proximitySensorIntake = new DigitalInput(Constants.RobotMap.kHopperIntakeProximitySensor);
     proximitySensorOuttake = new DigitalInput(Constants.RobotMap.kHopperOuttakeProximitySensor);
@@ -49,11 +52,11 @@ public class Hopper extends SubsystemBase {
   }
 
   public void setHopperPower(double power){
-    frontHopper.set(ControlMode.PercentOutput, power);
+    frontHopper.set(power);
   }
 
   public void setIndexer(double power){
-    indexerMaster.set(ControlMode.PercentOutput, power);
+    indexerMaster.set(power);
   }
   
   public boolean getIntakeSensor(){

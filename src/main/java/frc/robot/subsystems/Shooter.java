@@ -75,7 +75,6 @@ public class Shooter extends SubsystemBase {
     if (speed >= 0.05) {
       speed = 0;
     }
-
     articulatiungHood.set(ControlMode.PercentOutput, speed);
   } 
 
