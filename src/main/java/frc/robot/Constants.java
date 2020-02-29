@@ -89,4 +89,13 @@ public final class Constants {
         public static final int hoodBottom = 0;
         public static final int hoodTop = 0;
     }
+
+    public static final class liftConstants {
+        
+        //Velocity PID values to stop the lift
+        public static final float kP = 0f;
+        public static final float kI = 0f;
+        public static final float kD = 0f;
+        public static final float kF = 0f;
+    }
 }

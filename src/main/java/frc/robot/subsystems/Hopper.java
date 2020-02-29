@@ -26,6 +26,8 @@ public class Hopper extends SubsystemBase {
   private final DigitalInput proximitySensorIntake;
   private final DigitalInput proximitySensorOuttake;
 
+  private double ballCount = 0;
+
   public Hopper() {
     frontHopper = new TalonSRX(Constants.RobotMap.kFrontHopper);
     backHopper = new TalonSRX(Constants.RobotMap.kBackHopper);
@@ -48,6 +50,20 @@ public class Hopper extends SubsystemBase {
 
   public boolean getOuttakeSensor(){
     return proximitySensorOuttake.get();
+  }
+
+  public double clearCount(){
+    ballCount = 0;
+    return ballCount;
+  }
+
+  public double addBall(){
+    ballCount ++;
+    return ballCount;
+  }
+
+  public double getBallCount() {
+    return ballCount;
   }
 
   @Override
