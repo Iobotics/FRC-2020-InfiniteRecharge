@@ -30,6 +30,8 @@ public class Hopper extends SubsystemBase {
     frontHopper = new TalonSRX(Constants.RobotMap.kFrontHopper);
     backHopper = new TalonSRX(Constants.RobotMap.kBackHopper);
 
+    indexerMaster = new TalonSRX(Constants.RobotMap.kIndexer)
+
     proximitySensorIntake = new DigitalInput(Constants.RobotMap.kHopperIntakeProximitySensor);
     proximitySensorOuttake = new DigitalInput(Constants.RobotMap.kHopperOuttakeProximitySensor);
 
