@@ -34,6 +34,7 @@ public class AutoHopper extends CommandBase {
   public void execute() {
     if(hopper.getIntakeSensor()){
       hopper.setHopperPower(power);
+      hopper.addBall();
     }
 
     if(hopper.getOuttakeSensor()){

@@ -23,6 +23,7 @@ public class Shooter extends SubsystemBase {
   private TalonSRX rightShooter;
 
   private TalonSRX articulatiungHood;
+
   /**
    * Creates a new Shooter.
    */
@@ -54,7 +55,7 @@ public class Shooter extends SubsystemBase {
 
   public void setVelocity(double rpm) {
     //Convert Revolutions per Minute (RPM) to Cycles per 100 milliseconds (cpm) for closed loop controller
-    double cpm = rpm/600; 
+    double cpm = rpm * 600 / 8192; 
     leftShooter.set(ControlMode.Velocity, cpm); 
   }
 

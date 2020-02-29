@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     Logger.configureLoggingAndConfig(this, false);
     SmartDashboard.putNumber("Power", 0);
+    Logger.configureLoggingAndConfig(this, false);
   }
 
   /**

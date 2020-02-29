@@ -25,24 +25,23 @@ public final class Constants {
 
         //Intake
         public static final int kIntake = 4;
-        public static final int kIntakeArm = 5;
 
         //Hopper
-        public static final int kFrontHopper = 6;
-        public static final int kBackHopper = 7;
+        public static final int kFrontHopper = 5;
+        public static final int kBackHopper = 6;
         public static final int kIndexerMaster = 14;
         public static final int kIndexerSlave = 15;
-        public static final int kHopperIntakeProximitySensor = 16;
-        public static final int kHopperOuttakeProximitySensor = 17;
+        public static final int kHopperIntakeProximitySensor = 0;
+        public static final int kHopperOuttakeProximitySensor = 1;
         
         //Articulating Hood
-        public static final int kLeftShooter = 8;
-        public static final int kRightShooter = 9;
-        public static final int kArticulatingHood = 10;
+        public static final int kLeftShooter = 7;
+        public static final int kRightShooter = 8;
+        public static final int kArticulatingHood = 9;
 
         //Lift
-        public static final int kLiftMaster = 12;
-        public static final int kLiftSlave = 13;
+        public static final int kLiftMaster = 11;
+        public static final int kLiftSlave = 12;
     }
 
     public static final class OIConstants{
@@ -94,5 +93,14 @@ public final class Constants {
         //Encoder Values for the top and bottom position of the articulating hood
         public static final int hoodBottom = 0;
         public static final int hoodTop = 0;
+    }
+
+    public static final class liftConstants {
+        
+        //Velocity PID values to stop the lift
+        public static final float kP = 0f;
+        public static final float kI = 0f;
+        public static final float kD = 0f;
+        public static final float kF = 0f;
     }
 }

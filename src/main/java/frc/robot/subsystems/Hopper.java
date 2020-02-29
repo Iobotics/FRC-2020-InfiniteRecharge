@@ -22,16 +22,26 @@ public class Hopper extends SubsystemBase {
    */
   private final TalonSRX frontHopper;
   private final TalonSRX backHopper;
+  private final TalonSRX indexerMaster;
+  private final TalonSRX indexerSlave;
 
   private final DigitalInput proximitySensorIntake;
   private final DigitalInput proximitySensorOuttake;
+
+  private double ballCount = 0;
 
   public Hopper() {
     frontHopper = new TalonSRX(Constants.RobotMap.kFrontHopper);
     backHopper = new TalonSRX(Constants.RobotMap.kBackHopper);
 
+    indexerMaster = new TalonSRX(Constants.RobotMap.kIndexerMaster);
+    indexerSlave = new TalonSRX(Constants.RobotMap.kIndexerSlave);
+
     proximitySensorIntake = new DigitalInput(Constants.RobotMap.kHopperIntakeProximitySensor);
     proximitySensorOuttake = new DigitalInput(Constants.RobotMap.kHopperOuttakeProximitySensor);
+
+    indexerMaster.setInverted(false);
+    indexerSlave.follow(indexerMaster);
 
     backHopper.setInverted(true);
     frontHopper.setInverted(false);
@@ -42,12 +52,30 @@ public class Hopper extends SubsystemBase {
     frontHopper.set(ControlMode.PercentOutput, power);
   }
 
+  public void setIndexer(double power){
+    indexerMaster.set(ControlMode.PercentOutput, power);
+  }
+  
   public boolean getIntakeSensor(){
     return proximitySensorIntake.get();
   }
 
   public boolean getOuttakeSensor(){
     return proximitySensorOuttake.get();
+  }
+
+  public double clearCount(){
+    ballCount = 0;
+    return ballCount;
+  }
+
+  public double addBall(){
+    ballCount ++;
+    return ballCount;
+  }
+
+  public double getBallCount() {
+    return ballCount;
   }
 
   @Override
