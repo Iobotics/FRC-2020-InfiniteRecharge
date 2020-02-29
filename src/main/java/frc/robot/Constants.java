@@ -77,4 +77,15 @@ public final class Constants {
         //Feed Forward
         public static final float kF = 0f;
     }
+
+    public static final class HoodConstants {
+        //PID Values
+        public static final float kP = 0f;
+        public static final float kI = 0f;
+        public static final float kD = 0f;
+
+        //Encoder Values for the top and bottom position of the articulating hood
+        public static final int hoodBottom = 0;
+        public static final int hoodTop = 0;
+    }
 }
