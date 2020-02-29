@@ -15,7 +15,9 @@ import frc.robot.commands.AutoHopper;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -41,6 +43,7 @@ public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
   private final Limelight limelight = new Limelight();
   private final Hopper hopper = new Hopper();
+  private final Shooter shooter = new Shooter();
   private final Joystick joystick1 = new Joystick(OIConstants.kJoystick1);
   private final Joystick joystick2 = new Joystick(OIConstants.kJoystick2);
 
@@ -78,7 +81,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(joystick1, 2).whenPressed(new AutoAlign(limelight, drivetrain));
-   
+    
+    //Test Commands (delete later)
+    new JoystickButton(joystick1, OIConstants.kTest).whenPressed(
+      new InstantCommand(()-> shooter.setHoodAbsolute(0), shooter));
+
+    new JoystickButton(joystick2, OIConstants.kTest).whileHeld(
+      new RunCommand(() -> shooter.setVelocity(2000), shooter));
   }
 
   /**

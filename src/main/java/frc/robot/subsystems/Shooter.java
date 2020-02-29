@@ -62,12 +62,15 @@ public class Shooter extends SubsystemBase {
     leftShooter.set(ControlMode.PercentOutput, 0);
   }
 
-  /**
-   * 
+  /** 
    * @param percentFoward proportionall how far foward the hood is
    */
   public void setHood (double percentFoward) {
     articulatiungHood.set(ControlMode.Position, (percentFoward * (HoodConstants.hoodTop - HoodConstants.hoodBottom)) + HoodConstants.hoodBottom);
+  }
+
+  public void setHoodAbsolute (double position){
+      articulatiungHood.set(ControlMode.Position, position);
   }
 
   public void setManualHood (double speed) {
@@ -77,6 +80,10 @@ public class Shooter extends SubsystemBase {
 
     articulatiungHood.set(ControlMode.PercentOutput, speed);
   } 
+
+  public double getRPM(){
+    leftShooter.getSelectedSensorVelocity() 
+  }
 
   @Override
   public void periodic() {
