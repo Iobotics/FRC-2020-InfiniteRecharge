@@ -21,7 +21,7 @@ public final class Utils {
     }
 
     public static double findAngle(){
-        
+        return Math.random(); //Fix later.
     }
 
 }
