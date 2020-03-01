@@ -207,7 +207,7 @@ public class Drivetrain extends SubsystemBase {
    * */
   public Pose2d updateOdometry(){
     return driveOdometry.update(new Rotation2d(Utils.degreesToRadians(getHeading())), 
-    Utils.ticksToMeters((double) leftMaster.getSelectedSensorPosition()), 
+    Utils.ticksToMeters(leftMaster.getSelectedSensorPosition()), 
     Utils.ticksToMeters(rightMaster.getSelectedSensorPosition()));
   }
 
