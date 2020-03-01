@@ -7,13 +7,16 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.commands.AutoDrive;
 import frc.robot.commands.AutoHopper;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.LEDStrip;
 import frc.robot.subsystems.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -41,6 +44,7 @@ public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
   private final Limelight limelight = new Limelight();
   private final Hopper hopper = new Hopper();
+  private final LEDStrip ledStrip = new LEDStrip();
   private final Joystick joystick1 = new Joystick(OIConstants.kJoystick1);
   private final Joystick joystick2 = new Joystick(OIConstants.kJoystick2);
 
@@ -57,12 +61,16 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(new RunCommand(
         () -> drivetrain.setTank(Math.pow(-joystick1.getY(), 3), Math.pow(-joystick2.getY(), 3)), drivetrain));
     
-    
+    ledStrip.setDefaultCommand(new RunCommand(
+      () -> ledStrip.setColorAlliance(DriverStation.getInstance().getAlliance()), ledStrip
+    ));
 
     //Default Limelight command 
     limelight.setDefaultCommand(new RunCommand(() -> limelight.printValues(), limelight));
     hopper.setDefaultCommand(new AutoHopper(hopper, 0.5));
     SmartDashboard.putNumber("Auto Number", 0);
+
+
   }
 
   public double getGyro() {

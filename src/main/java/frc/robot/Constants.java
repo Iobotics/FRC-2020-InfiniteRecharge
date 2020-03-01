@@ -42,6 +42,8 @@ public final class Constants {
         //Lift
         public static final int kLiftMaster = 11;
         public static final int kLiftSlave = 12;
+
+        public static final int kArduino = 21;
     }
 
     public static final class OIConstants{
