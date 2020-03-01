@@ -57,7 +57,7 @@ public class Auto extends PIDCommand {
     gyroAngles[0] = gyro.getAngle();
     if (drivetrain.getVelocity() < 5 && (PID.getPositionError() < 1 || PID.getPositionError() > -1) && (gyroAngles[0] - gyroAngles[1] == 0)){
       return true;
-    }else{
+    } else{
       return false;
     }
   }

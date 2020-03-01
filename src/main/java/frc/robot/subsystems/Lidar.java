@@ -23,10 +23,16 @@ public class Lidar extends SubsystemBase {
   private byte[] delay;
   private byte[] test ={0,0,0};
 
+  private long value;
+
   public Lidar() {
     buffer = new byte[2];
     delay = new byte[6];
     lidar = new I2C(Port.kMXP, 98);
+  }
+
+  public long getValue() {
+    return value;
   }
 
   @Override
@@ -37,10 +43,8 @@ public class Lidar extends SubsystemBase {
     if(delay[0] == 1){
     } else {
       lidar.read(0x8f, 2, buffer);
-      SmartDashboard.putNumber("Lidar", Integer.toUnsignedLong(buffer[0] << 8) + Byte.toUnsignedInt(buffer[1]));
-    
+      value = Integer.toUnsignedLong(buffer[0] << 8) + Byte.toUnsignedInt(buffer[1]);
+      SmartDashboard.putNumber("Lidar", value);
     }
-    
-    
   }
 }

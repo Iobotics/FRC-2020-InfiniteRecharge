@@ -7,8 +7,12 @@
 
 package frc.robot.subsystems;
 
+import java.util.Collection;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.music.Orchestra;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
@@ -16,16 +20,39 @@ import frc.robot.Constants.RobotMap;
 
 public class Drivetrain extends SubsystemBase {
 
-  private TalonSRX leftMaster;
-  private TalonSRX rightMaster;
-  private TalonSRX leftSlave;
-  private TalonSRX rightSlave;
+  private TalonFX leftMaster;
+  private TalonFX rightMaster;
+  private TalonFX leftSlave;
+  private TalonFX rightSlave;
+
+  private Orchestra orchestra;
+  private Collection<TalonFX> instruments;
+
+  public enum CHRP {
+    MiiChannel("music/mii.chrp"), 
+    StarWarsImperialMarch("music/star_wars_imperial.chrp"),
+    RussianAnthem("music/russian_anthem");
+
+    private String path = "";
+
+    private CHRP(String path) {
+      this.path = path;
+    }
+  }
 
   public Drivetrain() {
-    leftMaster = new TalonSRX(RobotMap.kLeftMaster);
-    rightMaster =  new TalonSRX(RobotMap.kRightMaster);
-    leftSlave = new TalonSRX(RobotMap.kLeftSlave);
-    rightSlave = new TalonSRX(RobotMap.kRightSlave);
+    leftMaster = new TalonFX(RobotMap.kLeftMaster);
+    rightMaster =  new TalonFX(RobotMap.kRightMaster);
+    leftSlave = new TalonFX(RobotMap.kLeftSlave);
+    rightSlave = new TalonFX(RobotMap.kRightSlave);
+    
+    instruments.add(leftMaster);
+    instruments.add(leftSlave);
+    instruments.add(rightMaster);
+    instruments.add(rightSlave);
+
+    orchestra = new Orchestra(instruments);
+
     //Set Motor Polarities
     leftMaster.setInverted(false);
     leftSlave.setInverted(false);
@@ -107,6 +134,24 @@ public class Drivetrain extends SubsystemBase {
 
   public int getVelocity() {
     return leftMaster.getSelectedSensorVelocity();
+  }
+
+  public class Music {
+    public void play() {
+      orchestra.play();
+    }
+    public void play(CHRP music) {
+      orchestra.loadMusic(music.path);
+      orchestra.play();
+    }
+
+    public void pause() {
+      orchestra.pause();
+    }
+
+    public void stop() {
+      orchestra.stop();
+    }
   }
 
   @Override
