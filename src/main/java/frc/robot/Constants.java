@@ -43,6 +43,7 @@ public final class Constants {
         public static final int kLiftMaster = 11;
         public static final int kLiftSlave = 12;
 
+        //LED Strip
         public static final int kArduino = 21;
     }
 
@@ -98,5 +99,11 @@ public final class Constants {
         public static final float kI = 0f;
         public static final float kD = 0f;
         public static final float kF = 0f;
+    }
+
+    public static final class LEDConstants {
+        //Count starting from 0
+        public static final int kFirst = 0;
+        public static final int kLast = 178; 
     }
 }
