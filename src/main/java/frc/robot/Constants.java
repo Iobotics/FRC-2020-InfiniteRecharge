@@ -25,19 +25,20 @@ public final class Constants {
 
         //Intake
         public static final int kIntake = 4;
+        public static final int kIntakeSlave = 13;
 
         //Hopper
-        public static final int kFrontHopper = 5;
-        public static final int kBackHopper = 6;
-        public static final int kIndexerMaster = 14;
-        public static final int kIndexerSlave = 15;
+        public static final int kFrontHopper = 6;
+        public static final int kBackHopper = 7;
+        public static final int kIndexerMaster = 13;
+        public static final int kIndexerSlave = 14;
         public static final int kHopperIntakeProximitySensor = 0;
         public static final int kHopperOuttakeProximitySensor = 1;
         
         //Articulating Hood
-        public static final int kLeftShooter = 7;
-        public static final int kRightShooter = 8;
-        public static final int kArticulatingHood = 9;
+        public static final int kLeftShooter = 8;
+        public static final int kRightShooter = 9;
+        public static final int kArticulatingHood = 10;
 
         //Lift
         public static final int kLiftMaster = 11;

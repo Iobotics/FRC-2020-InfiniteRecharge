@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import java.util.Collection;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.music.Orchestra;
@@ -73,6 +74,12 @@ public class Drivetrain extends SubsystemBase {
     //Config Ramp Rate
     leftMaster.configOpenloopRamp(0.50);
     rightMaster.configOpenloopRamp(0.50);
+
+    //Config NeutralMode to brake
+    leftMaster.setNeutralMode(NeutralMode.Brake);
+    rightMaster.setNeutralMode(NeutralMode.Brake);
+    leftSlave.setNeutralMode(NeutralMode.Brake);
+    rightSlave.setNeutralMode(NeutralMode.Brake);
 
     //Configure PIDF values for Auto drive, the Left Master is the master controller for PID
     leftMaster.config_kP(0, DrivetrainConstants.kP);

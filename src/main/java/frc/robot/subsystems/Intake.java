@@ -19,9 +19,13 @@ public class Intake extends SubsystemBase {
    */
 
   private TalonSRX intake;
+  private TalonSRX intakeSlave;
 
   public Intake() {
     intake = new TalonSRX(RobotMap.kIntake);
+    intakeSlave = new TalonSRX(RobotMap.kIntakeSlave);
+    intakeSlave.setInverted(true);
+    intakeSlave.follow(intake);
   }
 
   public void setPercent(double demand) {
