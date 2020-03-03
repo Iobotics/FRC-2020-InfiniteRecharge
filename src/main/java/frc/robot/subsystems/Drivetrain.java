@@ -8,13 +8,16 @@
 package frc.robot.subsystems;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.music.Orchestra;
 import com.kauailabs.navx.frc.AHRS;
+import com.ctre.phoenix.music.Orchestra;
 
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -50,6 +53,18 @@ public class Drivetrain extends SubsystemBase {
   private TrajectoryConfig config;
 
   private Orchestra orchestra;
+
+  public enum CHRP {
+    MiiChannel("music/mii.chrp"), 
+    StarWarsImperialMarch("music/star_wars_imperial.chrp"),
+    RussianAnthem("music/russian_anthem");
+
+    private String path = "";
+
+    private CHRP(String path) {
+      this.path = path;
+    }
+  }
 
   public Drivetrain() {
     leftMaster = new WPI_TalonFX(RobotMap.kLeftMaster);
@@ -115,8 +130,8 @@ public class Drivetrain extends SubsystemBase {
     rightSlave.configNeutralDeadband(0);
 
     //Config Ramp Rate
-    leftMaster.configOpenloopRamp(0.51);
-    rightMaster.configOpenloopRamp(0.52);
+    leftMaster.configOpenloopRamp(0.50);
+    rightMaster.configOpenloopRamp(0.50);
 
     //Configure PIDF values for Auto drive, the Left Master is the master controller for PID
     leftMaster.config_kP(0, DrivetrainConstants.kP);
@@ -249,6 +264,40 @@ public class Drivetrain extends SubsystemBase {
   public void playMusic(String song){
     orchestra.loadMusic(song);
     orchestra.play();
+  }
+  //Are we there yet
+  public boolean isTargetAchieved (double distance, double error) {
+    double rotations = (distance * DrivetrainConstants.kGearRatio)/(DrivetrainConstants.kWheelDiameter*Math.PI);
+    double targetPos = rotations*2048;
+    //converting allowed error from inches to encoder units
+    double allowedError = ((error * DrivetrainConstants.kGearRatio)/(DrivetrainConstants.kWheelDiameter * Math.PI) * 2048);
+    if(Math.abs(leftMaster.getSelectedSensorPosition() - targetPos) <= allowedError && leftMaster.getSelectedSensorVelocity() == 0.0 && leftMaster.getActiveTrajectoryVelocity() < 3) {
+      return true;
+    } else{
+      return false;
+    }
+  }
+
+  public int getVelocity() {
+    return leftMaster.getSelectedSensorVelocity();
+  }
+
+  public class Music {
+    public void play() {
+      orchestra.play();
+    }
+    public void play(CHRP music) {
+      orchestra.loadMusic(music.path);
+      orchestra.play();
+    }
+
+    public void pause() {
+      orchestra.pause();
+    }
+
+    public void stop() {
+      orchestra.stop();
+    }
   }
 
   @Override

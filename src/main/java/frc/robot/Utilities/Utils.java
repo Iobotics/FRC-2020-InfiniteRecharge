@@ -8,6 +8,7 @@
 package frc.robot.Utilities;
 
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.subsystems.Lidar;
 
 /**
  * Class for Utlity and Math function
@@ -41,4 +42,9 @@ public final class Utils {
     public static double ticksToMeters(double ticks){
         return feetToMeters(ticksToInches(ticks) / 12);
     }
+    public static double findAngle(Lidar lidar){
+        long distance = lidar.getValue();
+        return 0; //Fix later.
+    }
+
 }

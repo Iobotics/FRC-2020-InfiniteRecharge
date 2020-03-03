@@ -8,10 +8,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.RobotMap;
 import frc.robot.Constants.ShooterConstants;
 
@@ -21,6 +23,7 @@ public class Shooter extends SubsystemBase {
   private TalonSRX rightShooter;
 
   private TalonSRX articulatiungHood;
+
   /**
    * Creates a new Shooter.
    */
@@ -40,6 +43,10 @@ public class Shooter extends SubsystemBase {
 
     leftShooter.setNeutralMode(NeutralMode.Brake);
     articulatiungHood.setNeutralMode(NeutralMode.Brake);
+    articulatiungHood.config_kP(0, HoodConstants.kP);
+    articulatiungHood.config_kI(0, HoodConstants.kI);
+    articulatiungHood.config_kD(0, HoodConstants.kD);
+    articulatiungHood.configSelectedFeedbackSensor(FeedbackDevice.Analog);
   }
 
   public void setPercent(double percent) {
@@ -48,7 +55,7 @@ public class Shooter extends SubsystemBase {
 
   public void setVelocity(double rpm) {
     //Convert Revolutions per Minute (RPM) to Cycles per 100 milliseconds (cpm) for closed loop controller
-    double cpm = rpm/600; 
+    double cpm = rpm * 600 / 8192; 
     leftShooter.set(ControlMode.Velocity, cpm); 
   }
 
@@ -56,16 +63,18 @@ public class Shooter extends SubsystemBase {
     leftShooter.set(ControlMode.PercentOutput, 0);
   }
 
-  //TODO: Add math so the hood actually works
-  public void setHood (double angleToGoal) {
-
+  /**
+   * 
+   * @param percentFoward proportionall how far foward the hood is
+   */
+  public void setHood (double percentFoward) {
+    articulatiungHood.set(ControlMode.Position, (percentFoward * (HoodConstants.hoodTop - HoodConstants.hoodBottom)) + HoodConstants.hoodBottom);
   }
 
   public void setManualHood (double speed) {
     if (speed >= 0.05) {
       speed = 0;
     }
-
     articulatiungHood.set(ControlMode.PercentOutput, speed);
   } 
 

@@ -19,7 +19,10 @@ public class AutoAlign extends PIDCommand {
   /**
    * Creates a new AutoAlign.
    */
-
+  static PIDController PID;
+  
+  Limelight limelight;
+  Drivetrain drivetrain;
   public AutoAlign(Limelight limelight, Drivetrain drive) {
     super(
         // The controller that the command will use
@@ -33,6 +36,8 @@ public class AutoAlign extends PIDCommand {
           drive.setTank(output, -output);
           // Use the output here
         });
+        this.limelight = limelight; 
+        this.drivetrain = drivetrain;
         addRequirements(drive,limelight);
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
@@ -41,6 +46,13 @@ public class AutoAlign extends PIDCommand {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    double limeAngles [] = {0, 0};
+    limeAngles[1] = limeAngles[0];
+    limeAngles[0] = limelight.getTX();
+    if (drivetrain.getVelocity() < 5 && (PID.getPositionError() < 1 || PID.getPositionError() > -1) && (limeAngles[0] - limeAngles[1] == 0)){
+      return true;
+    } else{
+      return false;
+    }
   }
 }

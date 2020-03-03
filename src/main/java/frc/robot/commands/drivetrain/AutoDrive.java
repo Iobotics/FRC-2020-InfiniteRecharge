@@ -5,7 +5,8 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drivetrain;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
@@ -17,6 +18,7 @@ public class AutoDrive extends CommandBase {
 
   double distance;
 
+  boolean finished = false;
   public AutoDrive(Drivetrain drivetrain, double distance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrain = drivetrain;
@@ -29,7 +31,7 @@ public class AutoDrive extends CommandBase {
   @Override
   public void initialize() {
     drivetrain.stop();
-    drivetrain.motionMagic(distance, 4);
+    drivetrain.motionMagic(distance, 0.5);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -50,4 +52,5 @@ public class AutoDrive extends CommandBase {
   public boolean isFinished() {
     return drivetrain.isTargetAchieved(distance, 10);
   }
-}
+  }
+
