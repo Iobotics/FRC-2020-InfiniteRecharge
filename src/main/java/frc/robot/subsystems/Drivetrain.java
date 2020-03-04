@@ -26,20 +26,6 @@ public class Drivetrain extends SubsystemBase {
   private TalonFX leftSlave;
   private TalonFX rightSlave;
 
-  private Orchestra orchestra;
-  private Collection<TalonFX> instruments;
-
-  public enum CHRP {
-    MiiChannel("music/mii.chrp"), 
-    StarWarsImperialMarch("music/star_wars_imperial.chrp"),
-    RussianAnthem("music/russian_anthem");
-
-    private String path = "";
-
-    private CHRP(String path) {
-      this.path = path;
-    }
-  }
 
   public Drivetrain() {
     leftMaster = new TalonFX(RobotMap.kLeftMaster);
@@ -47,13 +33,6 @@ public class Drivetrain extends SubsystemBase {
     leftSlave = new TalonFX(RobotMap.kLeftSlave);
     rightSlave = new TalonFX(RobotMap.kRightSlave);
     
-    instruments.add(leftMaster);
-    instruments.add(leftSlave);
-    instruments.add(rightMaster);
-    instruments.add(rightSlave);
-
-    orchestra = new Orchestra(instruments);
-
     //Set Motor Polarities
     leftMaster.setInverted(false);
     leftSlave.setInverted(false);
@@ -141,24 +120,6 @@ public class Drivetrain extends SubsystemBase {
 
   public int getVelocity() {
     return leftMaster.getSelectedSensorVelocity();
-  }
-
-  public class Music {
-    public void play() {
-      orchestra.play();
-    }
-    public void play(CHRP music) {
-      orchestra.loadMusic(music.path);
-      orchestra.play();
-    }
-
-    public void pause() {
-      orchestra.pause();
-    }
-
-    public void stop() {
-      orchestra.stop();
-    }
   }
 
   @Override
