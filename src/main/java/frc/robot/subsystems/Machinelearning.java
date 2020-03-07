@@ -10,10 +10,15 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 
-public class Machinelearning extends SubsystemBase {
+import java.lang.Math;
+
+public class MachineLearning extends SubsystemBase {
   /**
    * Creates a new Machinelearning.
    */
@@ -22,19 +27,19 @@ public class Machinelearning extends SubsystemBase {
    private NetworkTableInstance inst;
    private NetworkTableEntry boxes;
    private NetworkTableEntry number;
-   private NetworkTableEntry classes;
-   private int MclassNumber =0;
-   private double[][] coordinatesTable;
+   private double[] defaultValue = new double[] {0,0,0,0,0,0,0,0,0,0,0,0,0};
+   private double[] coornidates = new double[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    //initialize variables
+   public  double PWerror = 0; //angle of error in degrees
+   private double y = 0;  //y coordinate
+   private double Sx = 0; //scaled x coordinate relative to bot
 
-   double[] coordinates;
-   double[] defaultValue = new double [0];
 
-  public Machinelearning() {
-    inst = NetworkTableInstance.getDefault(); //setting up network tables for limelight
+  public MachineLearning() {
+    inst = NetworkTableInstance.getDefault(); //setting up network tables for Machinelearning
     table = inst.getTable("ML");
     boxes = table.getEntry("boxes");
     number = table.getEntry("nb_objects");
-    classes = table.getEntry("object_classes");
     inst.startClientTeam(2438);
     inst.startDSClient();
 
@@ -49,10 +54,6 @@ public class Machinelearning extends SubsystemBase {
    return false;
  }
 
- public String getClassName()
- {
-   return classes.getString("None");
- }
 
  public double getTargetNumber()
  {
@@ -61,28 +62,65 @@ public class Machinelearning extends SubsystemBase {
 
  public double[] getCoordinate()
  {
-   return boxes.getDoubleArray(defaultValue);
- }
+    return boxes.getDoubleArray(defaultValue);
+}
 
- public double[][] displayCoordinate()
- {
-   MclassNumber = (int)this.getTargetNumber();
-   for(int i =1; i<= MclassNumber; i++) {
-     for(int j = 0; j<=3; j++ )
-      coordinatesTable[i][j]= this.getCoordinate()[j];
-     }  
-     return coordinatesTable;
-   }
+  
+
 
   public void printValues()
  {
+   if(this.getCoordinate().length!=0) // Use length of coordinate array instead of getTargetNumber to avoid index exception 
+   {
+  coornidates=this.getCoordinate();
+    }
+    int n = this.findNearest(); // get id*4 of the nearest power cell
+    double x1 = coornidates[n]-180;
+    double y1 = 280-coornidates[n+1];
+    double x2 = coornidates[n+2]-180;
+    double y2 = 280-coornidates[n+3];
+    double x = 0.5*(x1+x2);
+  
+    y = 0.5*(y1+y2);
+    Sx = (1.248*(y2/260)+1)*x;  // Scaling X value relative to the bot (image rectification)
+   
   SmartDashboard.putNumber("DetectedNumber", this.getTargetNumber());
-  SmartDashboard.putString("ClassName", this.getClassName());
-  SmartDashboard.putNumberArray("coordinates", this.getCoordinate());
-  for(int i=1; i<= (int)this.getTargetNumber(); i++){
-  SmartDashboard.putNumberArray("coordinateTable", this.displayCoordinate()[i]);
+  SmartDashboard.putNumber("PW:x1",x1);
+  SmartDashboard.putNumber("PW:y1",y1);
+  SmartDashboard.putNumber("PW:x2",x2);
+  SmartDashboard.putNumber("PW:y2",y2);
+  SmartDashboard.putNumber("PW:x",Sx); 
+  SmartDashboard.putNumber("PW:y",y);
+  SmartDashboard.putNumber("PW:AOE",this.giveError()); //angle of error
+   }
+
+
+  public int findNearest()
+  {
+    if(this.getTargetNumber()==1){
+      return 0;
+    }
+    if(this.getCoordinate().length!=0)
+   {
+  coornidates=this.getCoordinate();
+    }
+    int nearestPC=0;
+    for(int i=0; i<this.getCoordinate().length/4; i++) // looping and looking for the smallest y coordinate value
+    {
+      if(coornidates[i*4+1]+coornidates[i*4+3]>coornidates[nearestPC*4+1]+coornidates[nearestPC*4+3]) 
+      nearestPC = i;
+    }
+    return nearestPC*4; 
   }
- }
+
+
+  public double giveError()
+  {
+    
+
+    PWerror = Math.atan(Sx/(y+57))/2/3.14*180-0.5; //calculate angle of error
+    return PWerror;
+  }
 
   @Override
   public void periodic() {

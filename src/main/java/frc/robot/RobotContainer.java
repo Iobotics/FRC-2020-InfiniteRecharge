@@ -7,14 +7,23 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.commands.AutoDrive;
+import frc.robot.commands.AutoHopper;
+import frc.robot.commands.AutoTarget;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.LEDStrip;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.MachineLearning;
+import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -39,11 +48,16 @@ public class RobotContainer {
   private final AHRS gyro = new AHRS();
   private final Drivetrain drivetrain = new Drivetrain();
   private final Limelight limelight = new Limelight();
-
+  private final Hopper hopper = new Hopper();
+  private final Shooter shooter = new Shooter();
+  private final LEDStrip ledStrip = new LEDStrip();
   private final Joystick joystick1 = new Joystick(OIConstants.kJoystick1);
   private final Joystick joystick2 = new Joystick(OIConstants.kJoystick2);
+  private final MachineLearning machineLearning = new MachineLearning();
 
   private final XboxController xboxController = new XboxController(OIConstants.kXboxController);
+  public double angleInitial = 0;
+  public static double angleErrors = 0;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -51,9 +65,21 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    //Default Drivetrain command is tank drive
     drivetrain.setDefaultCommand(new RunCommand(
         () -> drivetrain.setTank(Math.pow(-joystick1.getY(), 3), Math.pow(-joystick2.getY(), 3)), drivetrain));
+    
+    ledStrip.setDefaultCommand(new RunCommand(
+      () -> ledStrip.setColorAlliance(DriverStation.getInstance().getAlliance()), ledStrip
+    ));
+
+    //Default Limelight command 
     limelight.setDefaultCommand(new RunCommand(() -> limelight.printValues(), limelight));
+    hopper.setDefaultCommand(new AutoHopper(hopper, 0.5));
+
+    SmartDashboard.putNumber("Auto Number", 0);
+
 
     SmartDashboard.putNumber("Auto Number", 0);
   }
@@ -70,10 +96,18 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    new JoystickButton(joystick1, OIConstants.kTargetPW).whenPressed(
+      new SequentialCommandGroup(
+      new InstantCommand(()-> gyro.reset()),
+      new InstantCommand(()-> angleInitial = this.getGyro()),
+      new InstantCommand(()-> angleErrors = machineLearning.giveError()),
+      new InstantCommand(()-> SmartDashboard.putNumber("angleerros", angleErrors)),
+      new AutoTarget(gyro, angleErrors, angleInitial , drivetrain, machineLearning)
+    )
+  );
     new JoystickButton(joystick1, 2).whenPressed(new AutoAlign(limelight, drivetrain));
-    new JoystickButton(joystick1, 1).whenPressed(new StartEndCommand(
-        () -> drivetrain.setTank(SmartDashboard.getNumber("power", 1), SmartDashboard.getNumber("power", 1)),
-        () -> drivetrain.setTank(0, 0)));
+    
+    new JoystickButton(joystick1, 1).whileHeld(new StartEndCommand(()-> shooter.setPercent(-0.8), ()-> shooter.setPercent(0), shooter));
   }
 
   /**
@@ -82,12 +116,14 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    return null;
     // An ExampleCommand will run in autonomous
-    if(SmartDashboard = )
-    /*return new SequentialCommandGroup(
+   /* if(SmartDashboard.getNumber("Auto Number", 0) == 0){
+      return new SequentialCommandGroup(
       new AutoDrive(drivetrain, 130.36), 
-      new Auto(gyro, 14.18, gyro.getAngle(), drivetrain) //input the actual measured angle theta later as well as add shoot and intake commands
-      );*/
+      new Auto(gyro, -135, gyro.getAngle(), drivetrain) //input the actual measured angle theta later as well as add shoot and intake commands
+      );
+    }else if(SmartDashboard.getNumber("Auto Number", 0) == 1){
       return new SequentialCommandGroup(
         new AutoDrive(drivetrain, 120),
         new Auto(gyro, -90, gyro.getAngle(), drivetrain),
@@ -97,6 +133,20 @@ public class RobotContainer {
         new Auto(gyro, -90, gyro.getAngle(), drivetrain),
         new AutoDrive(drivetrain, 120),
         new Auto(gyro, -90, gyro.getAngle(), drivetrain));
+    }else if(SmartDashboard.getNumber("Auto Number", 0) == 2){
+      return new SequentialCommandGroup(
+        new AutoDrive(drivetrain, 10),
+        new Auto(gyro, 180, gyro.getAngle(), drivetrain),
+        //shoot ball here with shooter at angle theta
+        new Auto(gyro, 180, gyro.getAngle(), drivetrain));
+    }else{
+      return new SequentialCommandGroup(
+        //shoot balls
+        new Auto(gyro, 180, gyro.getAngle(), drivetrain),
+        new AutoDrive(drivetrain, 20));
+    }
+    */
+    
     //new AutoAlign(limelight, drivetrain)
     //AutoAlign(limelight, drivetrain);
     //return new AutoDrive(drivetrain, 120);

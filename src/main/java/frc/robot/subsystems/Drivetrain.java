@@ -7,8 +7,13 @@
 
 package frc.robot.subsystems;
 
+import java.util.Collection;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.music.Orchestra;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
@@ -16,16 +21,18 @@ import frc.robot.Constants.RobotMap;
 
 public class Drivetrain extends SubsystemBase {
 
-  private TalonSRX leftMaster;
-  private TalonSRX rightMaster;
-  private TalonSRX leftSlave;
-  private TalonSRX rightSlave;
+  private TalonFX leftMaster;
+  private TalonFX rightMaster;
+  private TalonFX leftSlave;
+  private TalonFX rightSlave;
+
 
   public Drivetrain() {
-    leftMaster = new TalonSRX(RobotMap.kLeftMaster);
-    rightMaster =  new TalonSRX(RobotMap.kRightMaster);
-    leftSlave = new TalonSRX(RobotMap.kLeftSlave);
-    rightSlave = new TalonSRX(RobotMap.kRightSlave);
+    leftMaster = new TalonFX(RobotMap.kLeftMaster);
+    rightMaster =  new TalonFX(RobotMap.kRightMaster);
+    leftSlave = new TalonFX(RobotMap.kLeftSlave);
+    rightSlave = new TalonFX(RobotMap.kRightSlave);
+    
     //Set Motor Polarities
     leftMaster.setInverted(false);
     leftSlave.setInverted(false);
@@ -44,8 +51,14 @@ public class Drivetrain extends SubsystemBase {
     rightSlave.configNeutralDeadband(0);
 
     //Config Ramp Rate
-    leftMaster.configOpenloopRamp(0.51);
-    rightMaster.configOpenloopRamp(0.52);
+    leftMaster.configOpenloopRamp(0.50);
+    rightMaster.configOpenloopRamp(0.50);
+
+    //Config NeutralMode to brake
+    leftMaster.setNeutralMode(NeutralMode.Brake);
+    rightMaster.setNeutralMode(NeutralMode.Brake);
+    leftSlave.setNeutralMode(NeutralMode.Brake);
+    rightSlave.setNeutralMode(NeutralMode.Brake);
 
     //Configure PIDF values for Auto drive, the Left Master is the master controller for PID
     leftMaster.config_kP(0, DrivetrainConstants.kP);
@@ -103,6 +116,10 @@ public class Drivetrain extends SubsystemBase {
     } else{
       return false;
     }
+  }
+
+  public int getVelocity() {
+    return leftMaster.getSelectedSensorVelocity();
   }
 
   @Override

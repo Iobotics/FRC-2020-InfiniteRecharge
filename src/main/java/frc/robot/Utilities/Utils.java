@@ -7,6 +7,8 @@
 
 package frc.robot.Utilities;
 
+import frc.robot.subsystems.Lidar;
+
 /**
  * Class for Utlity and Math function
  */
@@ -18,6 +20,11 @@ public final class Utils {
      */
      public static double absSign(double input){
         return (Math.abs(input) / input);
+    }
+
+    public static double findAngle(Lidar lidar){
+        long distance = lidar.getValue();
+        return 0; //Fix later.
     }
 
 }

@@ -6,48 +6,54 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Hopper;
 
-public class AutoDrive extends CommandBase {
+public class AutoHopper extends CommandBase {
   /**
-   * Creates a new AutoDrive.
+   * Creates a new AutoHopper.
    */
-  Drivetrain drivetrain;
+  Hopper hopper;
+  double power;
 
-  double distance;
-
-  public AutoDrive(Drivetrain drivetrain, double distance) {
+  public AutoHopper(Hopper hopper, double power) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.drivetrain = drivetrain;
-    this.distance = distance;
-
-    addRequirements(drivetrain);
+    this.hopper = hopper;
+    this.power = power;
+    addRequirements(hopper);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    drivetrain.stop();
-    drivetrain.motionMagic(distance, 4);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    if(hopper.getIntakeSensor()){
+      hopper.setHopperPower(power);
+      hopper.addBall();
+    }
+
+    if(hopper.getOuttakeSensor()){
+      hopper.setHopperPower(0);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drivetrain.config();
-    drivetrain.stop();
+    hopper.setHopperPower(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return drivetrain.isTargetAchieved(distance, 10);
+    if(!hopper.getIntakeSensor()){
+      return true;
+    }
+    return false;
   }
 }
