@@ -25,7 +25,7 @@ public final class Constants {
 
         //Intake
         public static final int kIntake = 4;
-        public static final int kIntakeSlave = 13;
+        public static final int kIntakeSlave = 5;
 
         //Hopper
         public static final int kFrontHopper = 6;

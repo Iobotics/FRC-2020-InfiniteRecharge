@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Lidar;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 
@@ -19,11 +20,11 @@ public class AimToShoot extends ParallelCommandGroup {
   /**
    * Creates a new AimToShoot.
    */
-  public AimToShoot(double rpm, double hoodAngle, Shooter shooter, Drivetrain drivetrain, Limelight limelight) {
+  public AimToShoot(double rpm, double hoodAngle, Shooter shooter, Drivetrain drivetrain, Limelight limelight, Lidar lidar) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());super();
     super(
-      new PrepShoot(hoodAngle, rpm, shooter),
+      new PrepShoot(hoodAngle, rpm, shooter, lidar),
       new AutoAlign(limelight, drivetrain)
     );
   }

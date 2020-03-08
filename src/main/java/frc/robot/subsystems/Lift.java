@@ -54,7 +54,8 @@ public class Lift extends SubsystemBase {
   }
 
   public void stopLift(){
-    liftMaster.set(ControlMode.Velocity, 0);
+    liftMaster.set(ControlMode.PercentOutput, 0);
+    //liftMaster.set(ControlMode.Velocity, 0);
   }
   
   public boolean getForwardLimit(){
