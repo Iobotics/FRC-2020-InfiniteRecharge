@@ -25,7 +25,7 @@ public class LEDStrip extends SubsystemBase {
   private boolean enable = true;
 
   public enum LEDColor {
-    Red(255, 0, 0), Orange(255, 165, 0), Yellow(255, 255, 0), Green(0, 255, 0), Blue(0, 0, 255), Indigo(0, 128, 255), Violet(127, 0, 255), Off(0, 0, 0);
+    RED(255, 0, 0), ORANGE(255, 165, 0), YELLOW(255, 255, 0), GREEN(0, 255, 0), BLUE(0, 0, 255), INDIGO(0, 128, 255), VIOLET(127, 0, 255), OFF(0, 0, 0);
 
     private int[] values = {0,0,0};
 
@@ -53,13 +53,16 @@ public class LEDStrip extends SubsystemBase {
 
   public void setEnable(final boolean enableVal) {
     enable = enableVal;
+    if (!enable) {
+      setColor(LEDColor.OFF);
+    }
   }
 
   public void setColorAlliance (Alliance alliance) {
     if (alliance == Alliance.Blue) {
-      setColor(LEDColor.Blue);
+      setColor(LEDColor.BLUE);
     } else {
-      setColor(LEDColor.Red);
+      setColor(LEDColor.RED);
     }
   }
 
@@ -85,7 +88,7 @@ public class LEDStrip extends SubsystemBase {
    */
   public boolean setCustomColor(final int r, final int g, final int b, int startLED, int endLED) {
     if (enable) {
-      if (arduino.write(0, r) && arduino.write(0, g) && arduino.write(0, b) && arduino.write(0, startLED) && arduino.write(0, endLED)) {
+      if (arduino.write(0x00, r) && arduino.write(0x00, g) && arduino.write(0x00, b) && arduino.write(0x00, startLED) && arduino.write(0x00, endLED)) {
         return true;
       } else {
         return false;
@@ -100,11 +103,11 @@ public class LEDStrip extends SubsystemBase {
    */
   private void setCustomColor(int[] values, int startLED, int endLED) {
     if (enable) {
-      arduino.write(0, values[0]);
-      arduino.write(0, values[1]);
-      arduino.write(0, values[2]);
-      arduino.write(0, startLED);
-      arduino.write(0, endLED);
+      arduino.write(0x00, values[0]);
+      arduino.write(0x00, values[1]);
+      arduino.write(0x00, values[2]);
+      arduino.write(0x00, startLED);
+      arduino.write(0x00, endLED);
     }
   }
 

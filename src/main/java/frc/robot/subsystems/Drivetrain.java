@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -52,19 +53,6 @@ public class Drivetrain extends SubsystemBase {
   private DifferentialDriveVoltageConstraint voltageConstraint;
   private TrajectoryConfig config;
 
-  private Orchestra orchestra;
-
-  public enum CHRP {
-    MiiChannel("music/mii.chrp"), 
-    StarWarsImperialMarch("music/star_wars_imperial.chrp"),
-    RussianAnthem("music/russian_anthem");
-
-    private String path = "";
-
-    private CHRP(String path) {
-      this.path = path;
-    }
-  }
 
   public Drivetrain() {
     leftMaster = new WPI_TalonFX(RobotMap.kLeftMaster);
@@ -133,18 +121,17 @@ public class Drivetrain extends SubsystemBase {
     leftMaster.configOpenloopRamp(0.50);
     rightMaster.configOpenloopRamp(0.50);
 
+    //Config NeutralMode to brake
+    leftMaster.setNeutralMode(NeutralMode.Brake);
+    rightMaster.setNeutralMode(NeutralMode.Brake);
+    leftSlave.setNeutralMode(NeutralMode.Brake);
+    rightSlave.setNeutralMode(NeutralMode.Brake);
+
     //Configure PIDF values for Auto drive, the Left Master is the master controller for PID
     leftMaster.config_kP(0, DrivetrainConstants.kP);
     leftMaster.config_kI(0, DrivetrainConstants.kI);
     leftMaster.config_kD(0, DrivetrainConstants.kD);
     leftMaster.config_kF(0, DrivetrainConstants.kF);
-
-    //Create Orchestra to play music
-    orchestra = new Orchestra();
-    orchestra.addInstrument(leftMaster);
-    orchestra.addInstrument(rightMaster);
-    orchestra.addInstrument(leftSlave);
-    orchestra.addInstrument(rightSlave);
   }
 
   /**
@@ -260,11 +247,6 @@ public class Drivetrain extends SubsystemBase {
       Utils.ticksToMeters((double) rightMaster.getSelectedSensorVelocity()) * 10);
   }
 
-  //Play Song
-  public void playMusic(String song){
-    orchestra.loadMusic(song);
-    orchestra.play();
-  }
   //Are we there yet
   public boolean isTargetAchieved (double distance, double error) {
     double rotations = (distance * DrivetrainConstants.kGearRatio)/(DrivetrainConstants.kWheelDiameter*Math.PI);
@@ -280,24 +262,6 @@ public class Drivetrain extends SubsystemBase {
 
   public int getVelocity() {
     return leftMaster.getSelectedSensorVelocity();
-  }
-
-  public class Music {
-    public void play() {
-      orchestra.play();
-    }
-    public void play(CHRP music) {
-      orchestra.loadMusic(music.path);
-      orchestra.play();
-    }
-
-    public void pause() {
-      orchestra.pause();
-    }
-
-    public void stop() {
-      orchestra.stop();
-    }
   }
 
   @Override
