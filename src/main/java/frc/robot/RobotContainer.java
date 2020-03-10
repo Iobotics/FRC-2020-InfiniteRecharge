@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.commands.AutoDrive;
 import frc.robot.commands.AutoHopper;
+import frc.robot.commands.LEDController;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.LEDStrip;
@@ -64,9 +65,7 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(new RunCommand(
         () -> drivetrain.setTank(Math.pow(-joystick1.getY(), 3), Math.pow(-joystick2.getY(), 3)), drivetrain));
     
-    ledStrip.setDefaultCommand(new RunCommand(
-      () -> ledStrip.setColorAlliance(DriverStation.getInstance().getAlliance()), ledStrip
-    ));
+    ledStrip.setDefaultCommand(new LEDController(ledStrip, hopper, shooter)); 
 
     //Default Limelight command 
     limelight.setDefaultCommand(new RunCommand(() -> limelight.printValues(), limelight));

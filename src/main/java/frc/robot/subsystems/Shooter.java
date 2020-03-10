@@ -54,6 +54,13 @@ public class Shooter extends SubsystemBase {
     articulatiungHood.setSensorPhase(false);
   }
 
+  public boolean getActive () {
+    if (leftShooter.getSelectedSensorVelocity() > 10) {
+      return true;
+    }
+    return false;
+  }
+
   public void setPercent(double percent) {
     leftShooter.set(ControlMode.PercentOutput, percent);
   }
