@@ -14,8 +14,10 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.music.Orchestra;
 
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
@@ -23,26 +25,29 @@ import frc.robot.Constants.RobotMap;
 
 public class Drivetrain extends SubsystemBase {
 
-  private TalonFX leftMaster;
-  private TalonFX rightMaster;
-  private TalonFX leftSlave;
-  private TalonFX rightSlave;
+  private WPI_TalonFX leftMaster;
+  private WPI_TalonFX rightMaster;
+  private WPI_TalonFX leftSlave;
+  private WPI_TalonFX rightSlave;
 
   private DifferentialDrive drive;
 
   public Drivetrain() {
-    leftMaster = new TalonFX(RobotMap.kLeftMaster);
-    rightMaster =  new TalonFX(RobotMap.kRightMaster);
-    leftSlave = new TalonFX(RobotMap.kLeftSlave);
-    rightSlave = new TalonFX(RobotMap.kRightSlave);
+    leftMaster = new WPI_TalonFX(RobotMap.kLeftMaster);
+    rightMaster = new WPI_TalonFX(RobotMap.kRightMaster);
+    leftSlave = new WPI_TalonFX(RobotMap.kLeftSlave);
+    rightSlave = new WPI_TalonFX(RobotMap.kRightSlave);
 
     drive = new DifferentialDrive(leftMaster, rightMaster);
-    
+    leftMaster.configFactoryDefault();
+    rightMaster.configFactoryDefault();
+    leftSlave.configFactoryDefault();
+    rightSlave.configFactoryDefault();
     //Set Motor Polarities
     leftMaster.setInverted(false);
     leftSlave.setInverted(false);
-    rightMaster.setInverted(true);
-    rightSlave.setInverted(true);
+    rightMaster.setInverted(false);
+    rightSlave.setInverted(false);
 
     //SetupSensor
     leftMaster.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
@@ -57,14 +62,14 @@ public class Drivetrain extends SubsystemBase {
     rightSlave.configNeutralDeadband(0);
 
     //Config Ramp Rate
-    leftMaster.configOpenloopRamp(0.5);
-    rightMaster.configOpenloopRamp(0.5);
+    leftMaster.configOpenloopRamp(1);
+    rightMaster.configOpenloopRamp(1);
 
     //Config NeutralMode to brake
-    leftMaster.setNeutralMode(NeutralMode.Brake);
-    rightMaster.setNeutralMode(NeutralMode.Brake);
-    leftSlave.setNeutralMode(NeutralMode.Brake);
-    rightSlave.setNeutralMode(NeutralMode.Brake);
+    leftMaster.setNeutralMode(NeutralMode.Coast);
+    rightMaster.setNeutralMode(NeutralMode.Coast);
+    leftSlave.setNeutralMode(NeutralMode.Coast);
+    rightSlave.setNeutralMode(NeutralMode.Coast);
 
     //Configure PIDF values for Auto drive, the Left Master is the master controller for PID
     leftMaster.config_kP(0, DrivetrainConstants.kP);
@@ -90,6 +95,10 @@ public class Drivetrain extends SubsystemBase {
   public void setTank(double leftPower, double rightPower){
     leftMaster.set(ControlMode.PercentOutput, leftPower);
     rightMaster.set(ControlMode.PercentOutput, rightPower);
+  }
+
+  public void setArcade(double speed, double rotation){
+    drive.arcadeDrive(speed, rotation);
   }
 
   /**

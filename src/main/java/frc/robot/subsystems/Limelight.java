@@ -37,6 +37,7 @@ public class Limelight extends SubsystemBase {
     tv = table.getEntry("tv");
     inst.startClientTeam(2438);
     inst.startDSClient();
+    table.getEntry("ledMode").setNumber(1);
   }
   public boolean isTargetDetected() //returns true or false based of TV value from the limelight
   {

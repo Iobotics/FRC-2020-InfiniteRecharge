@@ -67,7 +67,8 @@ public class RobotContainer {
 
     //Default Drivetrain command is tank drive
     drivetrain.setDefaultCommand(new RunCommand(
-        () -> drivetrain.setTank(0.5 * -joystick1.getY(), 0.5 *  -joystick2.getY()), drivetrain));
+        () -> drivetrain.setArcade(0.7 * -joystick1.getY(), 0.7 *  -joystick2.getX())
+        , drivetrain));
     
     ledStrip.setDefaultCommand(new RunCommand(
       () -> ledStrip.setColorAlliance(DriverStation.getInstance().getAlliance()), ledStrip
@@ -78,7 +79,7 @@ public class RobotContainer {
     hopper.setDefaultCommand(new AutoHopper(hopper, 0.5));
   
     lift.setDefaultCommand(new RunCommand(()-> lift.stopLift(), lift));
-    //shooter.setDefaultCommand(new RunCommand(()-> shooter.setHood((joystick1.getZ() + 1)/2), shooter));
+    shooter.setDefaultCommand(new RunCommand(()-> shooter.setHood((joystick1.getZ() + 1)/2), shooter));
 
     SmartDashboard.putNumber("Auto Number", 0);
 

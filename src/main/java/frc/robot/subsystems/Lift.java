@@ -16,6 +16,7 @@ import com.ctre.phoenix.motorcontrol.RemoteLimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.Constants.RobotMap;
 import frc.robot.Constants.liftConstants;
 
@@ -39,7 +40,9 @@ public class Lift extends SubsystemBase {
     
     //Configure Limti Switches for lift, bottom Switch is on the slave and top switch is on the master
     liftMaster.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
-    liftMaster.configReverseLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen, RobotMap.kLiftSlave);
+    liftMaster.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+    //liftSlave.configForwardLimitSwitchSource(LimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen, RobotMap.kLiftMaster);
+    //liftSlave.configReverseLimitSwitchSource(LimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen, RobotMap.kLiftMaster);
     liftMaster.overrideLimitSwitchesEnable(false);
     liftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     liftMaster.config_kP(0, liftConstants.kP);

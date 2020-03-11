@@ -26,7 +26,7 @@ public class Intake extends SubsystemBase {
     intakeSlave = new TalonSRX(RobotMap.kIntakeSlave);
     intake.configFactoryDefault();
     intakeSlave.configFactoryDefault();
-    intake.setInverted(true);
+    intake.setInverted(false);
     intakeSlave.setInverted(false);
     intakeSlave.follow(intake);
   }
