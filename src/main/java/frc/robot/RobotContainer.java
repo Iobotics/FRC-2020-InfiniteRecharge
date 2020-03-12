@@ -68,10 +68,10 @@ public class RobotContainer {
 
     //Default Drivetrain command is tank drive
     drivetrain.setDefaultCommand(new RunCommand(
-        () -> drivetrain.setArcade(0.7 * -joystick1.getY(), 0.7 *  -joystick2.getX())
+        () -> drivetrain.setArcade(0.7 * -joystick1.getY(), 0.7 *  joystick2.getX())
         , drivetrain));
     
-    ledStrip.setDefaultCommand(new LEDController(ledStrip, hopper, shooter)); 
+    //ledStrip.setDefaultCommand(new LEDController(ledStrip, hopper, shooter)); 
 
     //Default Limelight command 
     limelight.setDefaultCommand(new RunCommand(() -> limelight.printValues(), limelight));
@@ -100,7 +100,7 @@ public class RobotContainer {
     
     new JoystickButton(joystick1, 1).whileHeld(
         new StartEndCommand(
-          ()-> intake.setPercent(0.7),
+          ()-> intake.setPercent(0.45),
           ()-> intake.setPercent(0), intake )
     );
 
@@ -120,14 +120,14 @@ public class RobotContainer {
 
     new JoystickButton(joystick1, 6).whileHeld(
       new StartEndCommand(
-        ()-> lift.setLift(0.3), 
+        ()-> lift.setLift(-1), 
         ()-> lift.stopLift(), 
         lift)
     );
 
     new JoystickButton(joystick1, 7).whileHeld(
       new StartEndCommand(
-        ()-> lift.setLift(-0.3), 
+        ()-> lift.setLift(1), 
         ()-> lift.stopLift(), 
         lift)
     );

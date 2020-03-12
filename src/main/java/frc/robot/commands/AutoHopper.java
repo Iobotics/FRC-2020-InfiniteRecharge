@@ -32,14 +32,14 @@ public class AutoHopper extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(hopper.getIntakeSensor()){
+
+    if(hopper.getIntakeSensor() && !hopper.getOuttakeSensor()){
       hopper.setHopperPower(power);
       hopper.addBall();
     }
+    
 
-    if(hopper.getOuttakeSensor()){
-      hopper.setHopperPower(0);
-    }
+   else hopper.setHopperPower(0);
   }
 
   // Called once the command ends or is interrupted.
@@ -51,9 +51,6 @@ public class AutoHopper extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(!hopper.getIntakeSensor()){
-      return true;
-    }
     return false;
   }
 }

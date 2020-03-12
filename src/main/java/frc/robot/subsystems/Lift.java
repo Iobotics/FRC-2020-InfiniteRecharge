@@ -33,17 +33,16 @@ public class Lift extends SubsystemBase {
     liftMaster = new TalonSRX(RobotMap.kLiftMaster);
     liftSlave = new TalonSRX(RobotMap.kLiftSlave);
     liftSlave.follow(liftMaster);
-    liftMaster.setInverted(false);
-    liftSlave.setInverted(true);
+    liftMaster.setInverted(true);
+    liftSlave.setInverted(false);
     liftMaster.setNeutralMode(NeutralMode.Brake);
     liftSlave.setNeutralMode(NeutralMode.Brake);
     
     //Configure Limti Switches for lift, bottom Switch is on the slave and top switch is on the master
     liftMaster.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
     liftMaster.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
-    //liftSlave.configForwardLimitSwitchSource(LimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen, RobotMap.kLiftMaster);
-    //liftSlave.configReverseLimitSwitchSource(LimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen, RobotMap.kLiftMaster);
-    liftMaster.overrideLimitSwitchesEnable(false);
+    liftSlave.configForwardLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen, RobotMap.kLiftMaster);
+    liftSlave.configReverseLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen, RobotMap.kLiftMaster);
     liftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     liftMaster.config_kP(0, liftConstants.kP);
     liftMaster.config_kI(0, liftConstants.kI);

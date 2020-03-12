@@ -41,8 +41,8 @@ public final class Constants {
         public static final int kArticulatingHood = 10;
 
         //Lift
-        public static final int kLiftMaster = 11;
-        public static final int kLiftSlave = 12;
+        public static final int kLiftMaster = 12;
+        public static final int kLiftSlave = 11;
 
         //LED Strip
         public static final int kArduino = 21;
