@@ -78,15 +78,19 @@ public class RobotContainer {
     hopper.setDefaultCommand(new AutoHopper(hopper, 0.5));
   
     lift.setDefaultCommand(new RunCommand(()-> lift.stopLift(), lift));
-    shooter.setDefaultCommand(new RunCommand(()-> shooter.setHood((joystick1.getZ() + 1)/2), shooter));
+    shooter.setDefaultCommand(new RunCommand(()-> shooter.setHood((joystick1.getZ() + 1)/2),  shooter));
 
-    SmartDashboard.putNumber("Auto Number", 0);
+   ;
 
 
   }
 
   public double getGyro() {
     return gyro.getRoll();
+  }
+
+  public double getJstick() {
+    return joystick1.getZ();
   }
 
 
@@ -108,14 +112,14 @@ public class RobotContainer {
       new StartEndCommand(
            ()-> hopper.setHopperPower(joystick2.getZ()),
           ()-> hopper.setHopperPower(0) ,hopper)
+      
     );
-
+    
     new JoystickButton(joystick1, 2).whileHeld(
       new StartEndCommand(
-        ()-> shooter.setPercent(1),
-        ()-> shooter.setPercent(0),
-        shooter
-      )
+       
+        ()-> shooter.setPercent(SmartDashboard.getNumber("DB/Slider 0", .8)),
+        ()-> shooter.setPercent(0), shooter)
     );
 
     new JoystickButton(joystick1, 6).whileHeld(
