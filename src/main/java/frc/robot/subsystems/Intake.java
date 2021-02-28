@@ -30,6 +30,7 @@ public class Intake extends SubsystemBase {
 
   public void setPercent(double demand) {
     intake.set(ControlMode.PercentOutput, demand);
+    intakeSlave.set(ControlMode.PercentOutput, demand);
   } 
 
   @Override
