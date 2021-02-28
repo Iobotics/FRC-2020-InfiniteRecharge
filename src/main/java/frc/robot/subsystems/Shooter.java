@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.RobotMap;
@@ -30,8 +31,11 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     leftShooter = new TalonSRX(RobotMap.kLeftShooter);
     rightShooter = new TalonSRX(RobotMap.kRightShooter);
+    leftShooter.configFactoryDefault();
+    rightShooter.configFactoryDefault();
 
     articulatiungHood = new TalonSRX(RobotMap.kArticulatingHood);
+    articulatiungHood.configFactoryDefault();
 
     rightShooter.follow(leftShooter);
     rightShooter.setInverted(true);
@@ -43,10 +47,19 @@ public class Shooter extends SubsystemBase {
 
     leftShooter.setNeutralMode(NeutralMode.Brake);
     articulatiungHood.setNeutralMode(NeutralMode.Brake);
+
     articulatiungHood.config_kP(0, HoodConstants.kP);
     articulatiungHood.config_kI(0, HoodConstants.kI);
     articulatiungHood.config_kD(0, HoodConstants.kD);
     articulatiungHood.configSelectedFeedbackSensor(FeedbackDevice.Analog);
+    articulatiungHood.setSensorPhase(false);
+  }
+
+  public boolean getActive () {
+    if (leftShooter.getSelectedSensorVelocity() > 10) {
+      return true;
+    }
+    return false;
   }
 
   public void setPercent(double percent) {
@@ -72,14 +85,10 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setManualHood (double speed) {
-    if (speed >= 0.05) {
-      speed = 0;
-    }
     articulatiungHood.set(ControlMode.PercentOutput, speed);
   } 
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
   }
 }

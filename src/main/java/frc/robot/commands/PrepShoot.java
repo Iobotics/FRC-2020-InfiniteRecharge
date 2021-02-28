@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Utilities.Utils;
 import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Lidar;
 import frc.robot.subsystems.Shooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -21,11 +23,11 @@ public class PrepShoot extends SequentialCommandGroup {
   /**
    * Creates a new ShootBalls.
    */
-  public PrepShoot(double hoodAngle, double rpm, Shooter shooter) {
+  public PrepShoot(double hoodAngle, double rpm, Shooter shooter, Lidar lidar){
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-      new InstantCommand(()-> shooter.setHood(hoodAngle), shooter),
+      new InstantCommand(()-> shooter.setHood(Utils.findAngle(lidar)), shooter),
       new InstantCommand(()-> shooter.setVelocity(rpm), shooter)
     );
   }

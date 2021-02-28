@@ -16,6 +16,7 @@ import com.ctre.phoenix.motorcontrol.RemoteLimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.Constants.RobotMap;
 import frc.robot.Constants.liftConstants;
 
@@ -32,15 +33,16 @@ public class Lift extends SubsystemBase {
     liftMaster = new TalonSRX(RobotMap.kLiftMaster);
     liftSlave = new TalonSRX(RobotMap.kLiftSlave);
     liftSlave.follow(liftMaster);
-    liftMaster.setInverted(false);
-    liftSlave.setInverted(true);
+    liftMaster.setInverted(true);
+    liftSlave.setInverted(false);
     liftMaster.setNeutralMode(NeutralMode.Brake);
     liftSlave.setNeutralMode(NeutralMode.Brake);
     
     //Configure Limti Switches for lift, bottom Switch is on the slave and top switch is on the master
     liftMaster.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
-    liftMaster.configReverseLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen, RobotMap.kLiftSlave);
-    liftMaster.overrideLimitSwitchesEnable(false);
+    liftMaster.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+    liftSlave.configForwardLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen, RobotMap.kLiftMaster);
+    liftSlave.configReverseLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen, RobotMap.kLiftMaster);
     liftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     liftMaster.config_kP(0, liftConstants.kP);
     liftMaster.config_kI(0, liftConstants.kI);
@@ -54,7 +56,8 @@ public class Lift extends SubsystemBase {
   }
 
   public void stopLift(){
-    liftMaster.set(ControlMode.Velocity, 0);
+    liftMaster.set(ControlMode.PercentOutput, 0);
+    //liftMaster.set(ControlMode.Velocity, 0);
   }
   
   public boolean getForwardLimit(){

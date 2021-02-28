@@ -12,7 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXPIDSetConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -31,6 +31,7 @@ public class Hopper extends SubsystemBase {
   private final DigitalInput proximitySensorIntake;
   private final DigitalInput proximitySensorOuttake;
 
+  
   private double ballCount = 0;
 
   public Hopper() {
@@ -59,12 +60,14 @@ public class Hopper extends SubsystemBase {
     indexerMaster.set(power);
   }
   
+  @Log 
   public boolean getIntakeSensor(){
-    return proximitySensorIntake.get();
+    return !proximitySensorIntake.get();
   }
 
+  @Log
   public boolean getOuttakeSensor(){
-    return proximitySensorOuttake.get();
+    return !proximitySensorOuttake.get();
   }
 
   public double clearCount(){

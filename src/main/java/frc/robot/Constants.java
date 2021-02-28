@@ -41,8 +41,8 @@ public final class Constants {
         public static final int kArticulatingHood = 10;
 
         //Lift
-        public static final int kLiftMaster = 11;
-        public static final int kLiftSlave = 12;
+        public static final int kLiftMaster = 12;
+        public static final int kLiftSlave = 11;
 
         //LED Strip
         public static final int kArduino = 21;
@@ -84,13 +84,13 @@ public final class Constants {
 
     public static final class HoodConstants {
         //PID Values
-        public static final float kP = 0f;
+        public static final float kP = 4f;
         public static final float kI = 0f;
-        public static final float kD = 0f;
+        public static final float kD = 40f;
 
         //Encoder Values for the top and bottom position of the articulating hood
-        public static final int hoodBottom = 0;
-        public static final int hoodTop = 0;
+        public static final int hoodBottom = 680;
+        public static final int hoodTop = 420;
     }
 
     public static final class liftConstants {

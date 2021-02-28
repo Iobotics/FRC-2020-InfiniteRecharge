@@ -14,11 +14,17 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.commands.AutoDrive;
 import frc.robot.commands.AutoHopper;
+import frc.robot.commands.LEDController;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDStrip;
+import frc.robot.subsystems.Lift;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -44,6 +50,9 @@ public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
   private final Limelight limelight = new Limelight();
   private final Hopper hopper = new Hopper();
+  private final Shooter shooter = new Shooter();
+  private final Intake intake = new Intake();
+  private final Lift lift  = new Lift();
   private final LEDStrip ledStrip = new LEDStrip();
   private final Joystick joystick1 = new Joystick(OIConstants.kJoystick1);
   private final Joystick joystick2 = new Joystick(OIConstants.kJoystick2);
@@ -59,22 +68,25 @@ public class RobotContainer {
 
     //Default Drivetrain command is tank drive
     drivetrain.setDefaultCommand(new RunCommand(
-        () -> drivetrain.setTank(Math.pow(-joystick1.getY(), 3), Math.pow(-joystick2.getY(), 3)), drivetrain));
+        () -> drivetrain.setArcade(0.7 * -joystick1.getY(), 0.7 *  joystick2.getX())
+        , drivetrain));
     
-    ledStrip.setDefaultCommand(new RunCommand(
-      () -> ledStrip.setColorAlliance(DriverStation.getInstance().getAlliance()), ledStrip
-    ));
+    //ledStrip.setDefaultCommand(new LEDController(ledStrip, hopper, shooter)); 
 
     //Default Limelight command 
     limelight.setDefaultCommand(new RunCommand(() -> limelight.printValues(), limelight));
     hopper.setDefaultCommand(new AutoHopper(hopper, 0.5));
+  
+    lift.setDefaultCommand(new RunCommand(()-> lift.stopLift(), lift));
+    shooter.setDefaultCommand(new RunCommand(()-> shooter.setHood((joystick1.getZ() + 1)/2), shooter));
+
     SmartDashboard.putNumber("Auto Number", 0);
 
 
   }
 
   public double getGyro() {
-    return gyro.getAngle();
+    return gyro.getRoll();
   }
 
 
@@ -85,8 +97,40 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(joystick1, 2).whenPressed(new AutoAlign(limelight, drivetrain));
-   
+    
+    new JoystickButton(joystick1, 1).whileHeld(
+        new StartEndCommand(
+          ()-> intake.setPercent(0.45),
+          ()-> intake.setPercent(0), intake )
+    );
+
+    new JoystickButton(joystick2, 1).whileHeld(
+      new StartEndCommand(
+           ()-> hopper.setHopperPower(joystick2.getZ()),
+          ()-> hopper.setHopperPower(0) ,hopper)
+    );
+
+    new JoystickButton(joystick1, 2).whileHeld(
+      new StartEndCommand(
+        ()-> shooter.setPercent(1),
+        ()-> shooter.setPercent(0),
+        shooter
+      )
+    );
+
+    new JoystickButton(joystick1, 6).whileHeld(
+      new StartEndCommand(
+        ()-> lift.setLift(-1), 
+        ()-> lift.stopLift(), 
+        lift)
+    );
+
+    new JoystickButton(joystick1, 7).whileHeld(
+      new StartEndCommand(
+        ()-> lift.setLift(1), 
+        ()-> lift.stopLift(), 
+        lift)
+    );
   }
 
   /**
@@ -104,23 +148,23 @@ public class RobotContainer {
     }else if(SmartDashboard.getNumber("Auto Number", 0) == 1){
       return new SequentialCommandGroup(
         new AutoDrive(drivetrain, 120),
-        new Auto(gyro, -90, gyro.getAngle(), drivetrain),
+        new Auto(gyro, -90, getGyro(), drivetrain),
         new AutoDrive(drivetrain, 120),
-        new Auto(gyro, -90, gyro.getAngle(), drivetrain),
+        new Auto(gyro, -90, getGyro(), drivetrain),
         new AutoDrive(drivetrain, 120),
-        new Auto(gyro, -90, gyro.getAngle(), drivetrain),
+        new Auto(gyro, -90, getGyro(), drivetrain),
         new AutoDrive(drivetrain, 120),
-        new Auto(gyro, -90, gyro.getAngle(), drivetrain));
+        new Auto(gyro, -90, getGyro(), drivetrain));
     }else if(SmartDashboard.getNumber("Auto Number", 0) == 2){
       return new SequentialCommandGroup(
         new AutoDrive(drivetrain, 10),
-        new Auto(gyro, 180, gyro.getAngle(), drivetrain),
+        new Auto(gyro, 180, getGyro(), drivetrain),
         //shoot ball here with shooter at angle theta
-        new Auto(gyro, 180, gyro.getAngle(), drivetrain));
+        new Auto(gyro, 180, getGyro(), drivetrain));
     }else{
       return new SequentialCommandGroup(
         //shoot balls
-        new Auto(gyro, 180, gyro.getAngle(), drivetrain),
+        new Auto(gyro, 180, getGyro(), drivetrain),
         new AutoDrive(drivetrain, 20));
     }
     
