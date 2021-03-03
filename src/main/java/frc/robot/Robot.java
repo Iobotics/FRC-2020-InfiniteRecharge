@@ -104,6 +104,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     SmartDashboard.putNumber("Angle", m_robotContainer.getGyro());
+    SmartDashboard.putNumber("DB/Slider 1", m_robotContainer.getJstick());
+
   }
 
   @Override
