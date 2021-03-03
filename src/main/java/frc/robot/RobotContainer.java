@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.commands.AutoDrive;
 import frc.robot.commands.AutoHopper;
-import frc.robot.commands.LEDController;
+//import frc.robot.commands.LEDController;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
@@ -81,6 +81,7 @@ public class RobotContainer {
     shooter.setDefaultCommand(new RunCommand(()-> shooter.setHood((joystick1.getZ() + 1)/2), shooter));
 
     SmartDashboard.putNumber("Auto Number", 0);
+    SmartDashboard.putNumber("DB/Slider 1", joystick1.getZ());
 
 
   }
@@ -112,9 +113,10 @@ public class RobotContainer {
 
     new JoystickButton(joystick1, 2).whileHeld(
       new StartEndCommand(
-        ()-> shooter.setPercent(1),
+        ()-> shooter.setPercent(SmartDashboard.getNumber("DB/Slider 0", 0)),
         ()-> shooter.setPercent(0),
         shooter
+        
       )
     );
 
@@ -130,6 +132,10 @@ public class RobotContainer {
         ()-> lift.setLift(1), 
         ()-> lift.stopLift(), 
         lift)
+    );
+    new JoystickButton(joystick2, 2).whileHeld(
+      new AutoAlign(limelight,drivetrain),
+      SmartDashboard.putNumber("DB/Slider 3", 7)
     );
   }
 
