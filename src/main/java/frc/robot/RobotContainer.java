@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.commands.AutoDrive;
 import frc.robot.commands.AutoHopper;
-import frc.robot.commands.LEDController;
+//import frc.robot.commands.LEDController;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
@@ -125,9 +125,11 @@ public class RobotContainer {
     
     new JoystickButton(joystick1, 2).whileHeld(
       new StartEndCommand(
-       
-        ()-> shooter.setPercent(SmartDashboard.getNumber("DB/Slider 0", .8)),
-        ()-> shooter.setPercent(0), shooter)
+        ()-> shooter.setPercent(SmartDashboard.getNumber("DB/Slider 0", 0)),
+        ()-> shooter.setPercent(0),
+        shooter
+        
+      )
     );
 
     new JoystickButton(joystick1, 6).whileHeld(
@@ -142,6 +144,10 @@ public class RobotContainer {
         ()-> lift.setLift(1), 
         ()-> lift.stopLift(), 
         lift)
+    );
+    new JoystickButton(joystick2, 2).whileHeld(
+      new AutoAlign(limelight,drivetrain),
+      SmartDashboard.putNumber("DB/Slider 3", 7)
     );
   }
 
