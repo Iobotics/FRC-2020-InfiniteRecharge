@@ -79,7 +79,8 @@ public class RobotContainer {
   
     lift.setDefaultCommand(new RunCommand(()-> lift.stopLift(), lift));
     shooter.setDefaultCommand(new RunCommand(()-> shooter.setHood((joystick1.getZ() + 1)/2),  shooter));
-
+    
+    SmartDashboard.putNumber("DB/Slider 1", joystick1.getZ());
    ;
 
 
@@ -112,8 +113,15 @@ public class RobotContainer {
       new StartEndCommand(
            ()-> hopper.setHopperPower(joystick2.getZ()),
           ()-> hopper.setHopperPower(0) ,hopper)
-      
+          );
+
+    new JoystickButton(joystick2, 1).whileHeld(
+      new RunCommand(
+        ()->SmartDashboard.putNumber("DB/Slider 2", joystick2.getZ())
+      )
     );
+      
+    
     
     new JoystickButton(joystick1, 2).whileHeld(
       new StartEndCommand(
