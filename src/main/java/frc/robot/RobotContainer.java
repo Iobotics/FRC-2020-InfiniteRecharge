@@ -115,12 +115,12 @@ public class RobotContainer {
           ()-> hopper.setHopperPower(0) ,hopper)
           );
 
-    new JoystickButton(joystick2, 1).whileHeld(
-      new RunCommand(
-        ()->SmartDashboard.putNumber("DB/Slider 2", joystick2.getZ())
-      )
-    );
-      
+//    new JoystickButton(joystick2, 1).whileHeld(
+  //    new RunCommand(
+    //    ()->SmartDashboard.putNumber("DB/Slider 2", joystick2.getZ())
+     // )
+   // );
+     //Currently Edited out to find what "Output" is in autoalign 
     
     
     new JoystickButton(joystick1, 2).whileHeld(
