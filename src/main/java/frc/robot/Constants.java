@@ -107,4 +107,8 @@ public final class Constants {
         public static final int kFirst = 0;
         public static final int kLast = 178; 
     }
+
+    public static final class HopperConstants {
+        public static final double kRampRate = 0.5;
+    }
 }

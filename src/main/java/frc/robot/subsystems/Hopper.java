@@ -16,8 +16,10 @@ import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.HopperConstants;
 
 public class Hopper extends SubsystemBase {
+  
   /**
    * Creates a new Hopper.
    */
@@ -50,6 +52,9 @@ public class Hopper extends SubsystemBase {
     backHopper.setInverted(true);
     frontHopper.setInverted(false);
     backHopper.follow(frontHopper);
+
+    frontHopper.setOpenLoopRampRate(HopperConstants.kRampRate);
+
   }
 
   public void setHopperPower(double power){

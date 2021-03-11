@@ -113,7 +113,14 @@ public class RobotContainer {
       new StartEndCommand(
            ()-> hopper.setHopperPower(joystick2.getZ()),
           ()-> hopper.setHopperPower(0) ,hopper)
+        
           );
+
+   new JoystickButton(joystick2, 1).whileHeld(
+      new RunCommand(
+        ()->SmartDashboard.putNumber("DB/Slider 2", joystick2.getZ())
+         )
+      );
 
 //    new JoystickButton(joystick2, 1).whileHeld(
   //    new RunCommand(
