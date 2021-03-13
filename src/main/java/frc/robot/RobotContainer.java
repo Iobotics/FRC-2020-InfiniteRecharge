@@ -111,7 +111,7 @@ public class RobotContainer {
 
     new JoystickButton(joystick2, 1).whileHeld(
       new StartEndCommand(
-           ()-> hopper.setHopperPower(joystick2.getZ()),
+           ()-> hopper.setHopperPower(joystick2.getZ()*.5),
           ()-> hopper.setHopperPower(0) ,hopper)
         
           );
